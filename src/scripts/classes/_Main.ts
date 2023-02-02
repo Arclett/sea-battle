@@ -6,8 +6,9 @@ export class Main {
     }
 
     clickHandler(e: Event) {
+        e.preventDefault();
         if (!(e.target instanceof HTMLElement)) return;
-        if (e.target.classList.contains("login-button")) {
+        if (e.target.classList.contains("round-button__link")) {
             const loginWindow = new LoginWindow(document.body);
             loginWindow.start();
         }
