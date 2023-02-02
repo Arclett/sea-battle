@@ -1,0 +1,30 @@
+.header {
+  height: 60px;
+  background: midnightblue;
+}
+
+.header__wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.round-button__text {
+  display: none;
+}
+
+.header__round-button:hover {
+  background: aliceblue;
+
+  .round-button__link{
+    background: midnightblue;
+  }
+
+  .round-button__text {
+    display: block;
+    margin: auto;
+  }
+
+  .round-button__icon {
+    display: none;
+  }
+}
