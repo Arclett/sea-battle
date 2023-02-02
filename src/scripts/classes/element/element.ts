@@ -1,4 +1,5 @@
-import { ElementInterface, InputElement } from "../../interfaces";
+import { ElementInterface, InputElement } from "../../types/interfaces";
+
 
 
 
