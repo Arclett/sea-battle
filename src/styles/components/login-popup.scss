@@ -1,0 +1,21 @@
+.login-popup {
+    .login__overlay {
+        position: fixed;
+        top: 0;
+        background-color: $overlay;
+        width: 100vw;
+        height: 100vh;
+        z-index: 5;
+    }
+
+    .login__wrapper {
+        position: fixed;
+        z-index: 6;
+        width: 30%;
+        left: 35%;
+        top: 20vh;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
