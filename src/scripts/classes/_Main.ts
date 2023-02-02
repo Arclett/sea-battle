@@ -8,8 +8,8 @@ export class Main {
     clickHandler(e: Event) {
         e.preventDefault();
         if (!(e.target instanceof HTMLElement)) return;
-        if (e.target.classList.contains("round-button__link")) {
-            const loginWindow = new LoginWindow(document.body);
+        if (e.target.classList.contains("round-button__link") || e.target.classList.contains("round-button__text")) {
+            const loginWindow = new LoginWindow();
             loginWindow.start();
         }
     }

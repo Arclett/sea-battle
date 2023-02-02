@@ -1,10 +1,9 @@
 export class RenderLoginWindow {
     static render(container: HTMLElement) {
+        container.replaceChildren();
+
         const overlay = document.createElement("div");
         overlay.className = "login-overlay";
-
-        const loginWrapper = document.createElement("div");
-        loginWrapper.className = "login-wrapper";
 
         const loginTitle = document.createElement("h2");
         loginTitle.textContent = "Login";
@@ -18,5 +17,15 @@ export class RenderLoginWindow {
         accPass.type = "password";
         accPass.placeholder = "password";
         accPass.className = "account-pass-input";
+
+        const enterButton = document.createElement("button");
+        enterButton.textContent = "Enter";
+        enterButton.className = "login-enter-button";
+
+        const regButton = document.createElement("button");
+        regButton.textContent = "Registration";
+        regButton.className = "reg-button";
+
+        container.append(loginTitle, accInput, accPass, enterButton, regButton, overlay);
     }
 }
