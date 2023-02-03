@@ -1,28 +1,25 @@
 // abstract //
 //@import "abstract/constants";
 @import "abstract/mixins";
+@import "./abstract/variables.scss";
 
 // base //
 @import "base/base";
 @import "base/typography";
 
-
 // components //
 @import "components/header";
 @import "components/round-button";
-
+@import "./components/login-popup.scss";
 
 @import "components/footer";
-
 
 // layouts //
 @import "layouts/wrapper";
 
 // fonts //
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap");
 
 // h1 {
 //   color: purple;
 // }
-
-
