@@ -7,7 +7,7 @@ export class Element {
             el.id = id;
         }
         if (classNote) {
-            el.classList.add(classNote);
+            el.className = classNote;
         }
         if (content) {
             el.textContent = content;
@@ -26,7 +26,7 @@ export class Element {
             el.id = id;
         }
         if (classNote) {
-            el.classList.add(classNote);
+            el.className = classNote;
         }
         if (value) {
             el.value = value;
