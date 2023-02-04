@@ -1,0 +1,41 @@
+.field__box {
+  display: flex;
+}
+
+.list__ships {
+  display: flex;
+  gap: 10px;
+}
+
+.field {
+
+}
+
+.ship {
+  height: 33px;
+  background-color: rgb(0, 255, 225);
+}
+
+.ship:hover {
+  cursor: pointer;
+}
+
+.ship:active {
+  cursor: default;
+}
+
+.battleship {
+  width: 132px;
+}
+
+.cruiser {
+  width: 99px;
+}
+
+.destroyer {
+  width: 66px;
+}
+
+.boat {
+  width: 33px;
+}
