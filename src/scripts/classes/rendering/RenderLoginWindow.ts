@@ -1,7 +1,7 @@
 import { Element } from "../element/element";
 
 export class RenderLoginWindow {
-    static render(container: HTMLElement) {
+    static renderLogin(container: HTMLElement) {
         container.replaceChildren();
 
         const overlay = Element.createElement({ tag: "div", classNote: "login__overlay" });
@@ -16,21 +16,42 @@ export class RenderLoginWindow {
             classNote: "login__accaunt-input",
         });
 
+        const emailInput = Element.createInput({
+            type: "email",
+            content: "email",
+            classNote: "login__email-input hidden",
+        });
+
         const accPass = Element.createInput({ type: "password", classNote: "login__pass-input", content: "password" });
+
+        const accPassConfirm = Element.createInput({
+            type: "password",
+            classNote: "login__pass-confirm hidden",
+            content: "confirm password",
+        });
 
         const enterButton = Element.createElement({
             tag: "button",
-            classNote: "login__enter-button",
+            classNote: "login__enter-button login-mode",
             content: "Enter",
         });
 
-        const regButton = Element.createElement({
-            tag: "button",
-            classNote: "login__regist-button",
-            content: "Create new account",
+        const changeMode = Element.createElement({
+            tag: "div",
+            classNote: "login__regist-button login-mode",
+            content: "or create new account",
         });
 
-        loginWrapper.append(loginTitle, accInput, accPass, enterButton, regButton);
+        loginWrapper.append(loginTitle, accInput, emailInput, accPass, accPassConfirm, enterButton, changeMode);
         container.append(loginWrapper, overlay);
+
+        return {
+            accInput: accInput,
+            accPass: accPass,
+            emailInput: emailInput,
+            accPassConfirm: accPassConfirm,
+            changeMode: changeMode,
+            enterButton: enterButton,
+        };
     }
 }
