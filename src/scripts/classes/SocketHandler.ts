@@ -1,4 +1,5 @@
 import { io, Socket } from "socket.io-client";
+import { GetUserData } from "../types/interfaces";
 import { Constants } from "./Constants";
 
 export class SocketHandler {
@@ -6,9 +7,16 @@ export class SocketHandler {
 
     authToken: string | undefined;
 
+    overlay: HTMLElement;
+
+    userData: GetUserData | undefined;
+
+    constructor(overlay: HTMLElement) {
+        this.overlay = overlay;
+    }
+
     start() {
         this.authToken = this.getLocalStorage("authToken");
-        console.log(this.authToken);
         if (this.authToken) {
             this.authorization(this.authToken);
             return this.socket;
@@ -17,6 +25,7 @@ export class SocketHandler {
 
     authorization(token: string, userName?: string, password?: string, email?: string) {
         console.log(token);
+        this.overlay.classList.remove("hidden");
         this.socket = io(Constants.serverUrl, {
             transportOptions: {
                 polling: {
@@ -30,16 +39,19 @@ export class SocketHandler {
             },
         });
 
-        this.socket.on("auth token", (token: string, user: string) => {
+        this.socket.on("auth token", (token: string, user: GetUserData) => {
+            this.overlay.classList.add("hidden");
             this.authToken = token;
             this.saveToLocalStorage();
             console.log("connected");
-            console.log(`Hello ${user}`);
+            console.log(`Hello ${user.userName}`);
+            this.userData = user;
             const text = document.querySelector(".round-button__text");
-            if (text instanceof HTMLElement) text.textContent = user;
+            if (text instanceof HTMLElement) text.textContent = user.userName;
         });
 
         this.socket.on("connect_error", (err: Error) => {
+            this.overlay.classList.add("hidden");
             console.log(err.message);
         });
     }
