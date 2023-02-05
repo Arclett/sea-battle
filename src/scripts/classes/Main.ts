@@ -11,6 +11,7 @@ export class Main {
         this.socketHandler.start();
         this.loginWindow = new LoginWindow();
         document.body.addEventListener("click", this.clickHandler.bind(this));
+        window.addEventListener("beforeunload", this.socketHandler.saveToLocalStorage.bind(this));
     }
 
     clickHandler(e: Event) {
@@ -32,12 +33,12 @@ export class Main {
         const email = elems.emailInput.value;
         if (elem.classList.contains("login-mode")) {
             if (!accName || !pass) return;
-            this.socketHandler.authorization(accName, "login", pass);
+            this.socketHandler.authorization("login", accName, pass);
         }
         if (elem.classList.contains("reg-mode")) {
             if (!accName || !pass || !passConfirm || !email) return;
             if (pass !== passConfirm) return;
-            this.socketHandler.authorization(accName, "reg", pass, email);
+            this.socketHandler.authorization("reg", accName, pass, email);
         }
     }
 }

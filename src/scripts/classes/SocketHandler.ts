@@ -2,23 +2,20 @@ import { io, Socket } from "socket.io-client";
 import { Constants } from "./Constants";
 
 export class SocketHandler {
-    userName: string | undefined;
-
     socket: Socket;
 
     authToken: string | undefined;
 
     start() {
-        this.userName = this.getLocalStorage("userName");
         this.authToken = this.getLocalStorage("authToken");
-        if (this.userName && this.authToken) {
-            this.authorization(this.userName, this.authToken);
-            window.addEventListener("beforeunload", this.saveToLocalStorage.bind(this));
+        console.log(this.authToken);
+        if (this.authToken) {
+            this.authorization(this.authToken);
             return this.socket;
         }
     }
 
-    authorization(userName: string, token: string, password?: string, email?: string) {
+    authorization(token: string, userName?: string, password?: string, email?: string) {
         console.log(token);
         this.socket = io(Constants.serverUrl, {
             transportOptions: {
@@ -33,11 +30,13 @@ export class SocketHandler {
             },
         });
 
-        this.socket.on("auth token", (data: string, user: {}) => {
-            this.authToken = data;
+        this.socket.on("auth token", (token: string, user: string) => {
+            this.authToken = token;
+            this.saveToLocalStorage();
             console.log("connected");
-            console.log(data);
-            console.log(user);
+            console.log(`Hello ${user}`);
+            const text = document.querySelector(".round-button__text");
+            if (text instanceof HTMLElement) text.textContent = user;
         });
 
         this.socket.on("connect_error", (err: Error) => {
@@ -57,7 +56,6 @@ export class SocketHandler {
     }
 
     saveToLocalStorage() {
-        if (this.userName) localStorage.setItem("userName", this.userName);
         if (this.authToken) localStorage.setItem("authToken", this.authToken);
     }
 }
