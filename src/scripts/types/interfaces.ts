@@ -16,6 +16,15 @@ export interface InputElement {
     disable?: boolean;
 }
 
+export interface ImageElement {
+    src: string;
+    alt?: string;
+    id?: string;
+    classNote?: string;
+    width?: number;
+    height?: number;
+}
+
 export interface LoginWindowElements {
     accInput: HTMLInputElement;
     accPass: HTMLInputElement;
@@ -29,3 +38,4 @@ export interface CreateUserData {
     email: string;
     password: string;
 }
+
