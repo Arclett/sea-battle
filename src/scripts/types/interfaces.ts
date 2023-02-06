@@ -29,3 +29,11 @@ export interface CreateUserData {
     email: string;
     password: string;
 }
+
+export interface GetUserData {
+    userName: string;
+    userGold: number;
+    currentFrame: string;
+    currentShipSkin: string;
+    currentFieldSkin: string;
+}

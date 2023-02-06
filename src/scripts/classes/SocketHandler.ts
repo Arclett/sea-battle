@@ -1,25 +1,31 @@
 import { io, Socket } from "socket.io-client";
+import { GetUserData } from "../types/interfaces";
 import { Constants } from "./Constants";
 
 export class SocketHandler {
-    userName: string | undefined;
-
     socket: Socket;
 
     authToken: string | undefined;
 
+    overlay: HTMLElement;
+
+    userData: GetUserData | undefined;
+
+    constructor(overlay: HTMLElement) {
+        this.overlay = overlay;
+    }
+
     start() {
-        this.userName = this.getLocalStorage("userName");
         this.authToken = this.getLocalStorage("authToken");
-        if (this.userName && this.authToken) {
-            this.authorization(this.userName, this.authToken);
-            window.addEventListener("beforeunload", this.saveToLocalStorage.bind(this));
+        if (this.authToken) {
+            this.authorization(this.authToken);
             return this.socket;
         }
     }
 
-    authorization(userName: string, token: string, password?: string, email?: string) {
+    authorization(token: string, userName?: string, password?: string, email?: string) {
         console.log(token);
+        this.overlay.classList.remove("hidden");
         this.socket = io(Constants.serverUrl, {
             transportOptions: {
                 polling: {
@@ -33,14 +39,19 @@ export class SocketHandler {
             },
         });
 
-        this.socket.on("auth token", (data: string, user: {}) => {
-            this.authToken = data;
+        this.socket.on("auth token", (token: string, user: GetUserData) => {
+            this.overlay.classList.add("hidden");
+            this.authToken = token;
+            this.saveToLocalStorage();
             console.log("connected");
-            console.log(data);
-            console.log(user);
+            console.log(`Hello ${user.userName}`);
+            this.userData = user;
+            const text = document.querySelector(".round-button__text");
+            if (text instanceof HTMLElement) text.textContent = user.userName;
         });
 
         this.socket.on("connect_error", (err: Error) => {
+            this.overlay.classList.add("hidden");
             console.log(err.message);
         });
     }
@@ -57,7 +68,6 @@ export class SocketHandler {
     }
 
     saveToLocalStorage() {
-        if (this.userName) localStorage.setItem("userName", this.userName);
         if (this.authToken) localStorage.setItem("authToken", this.authToken);
     }
 }
