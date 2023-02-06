@@ -1,6 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { GetUserData } from "../types/interfaces";
 import { Constants } from "./Constants";
+import { RenderMultiPlayer } from "./rendering/RenderMultiPlayer";
 
 export class SocketHandler {
     socket: Socket;
@@ -10,6 +11,8 @@ export class SocketHandler {
     overlay: HTMLElement;
 
     userData: GetUserData | undefined;
+
+    currentChat: HTMLElement;
 
     constructor(overlay: HTMLElement) {
         this.overlay = overlay;
@@ -54,6 +57,14 @@ export class SocketHandler {
             this.overlay.classList.add("hidden");
             console.log(err.message);
         });
+
+        this.socket.on("chat message", (text: string) => {
+            if (this.currentChat) RenderMultiPlayer.renderMessage(this.currentChat, text);
+        });
+    }
+
+    sendToChat(text: string) {
+        this.socket.emit("send to chat", text);
     }
 
     socketListners(socket: Socket) {
