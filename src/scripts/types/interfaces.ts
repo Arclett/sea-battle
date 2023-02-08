@@ -40,4 +40,5 @@ export interface GetUserData {
 export interface MultuPlayerElems {
     chatInput: HTMLInputElement;
     chatBody: HTMLElement;
+    linkBody: HTMLElement;
 }

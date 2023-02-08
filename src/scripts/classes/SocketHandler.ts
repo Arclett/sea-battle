@@ -106,4 +106,14 @@ export class SocketHandler {
         this.overlay.classList.add("hidden");
         this.overlay.replaceChildren();
     }
+
+    sendLink(link: string) {
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("send link", link);
+    }
+
+    guestJoin(id: string) {
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("join by link", id);
+    }
 }

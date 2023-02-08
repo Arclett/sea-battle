@@ -55,12 +55,14 @@ export class Main {
         if (e.target.classList.contains("chat__button")) this.multiPlayer.send();
         if (e.target.classList.contains("random-opponent-button")) this.multiPlayer.randomOpponent();
         if (e.target.classList.contains("loading-window__button")) SocketHandler.instance.cancelMathcMaking();
+        if (e.target.classList.contains("create-link__create")) this.multiPlayer.createLink();
+        if (e.target.classList.contains("create-link__copy")) this.multiPlayer.copyLink();
     }
 
     appRouting(hash: string) {
         // для примера, поменять в адресной строке хеш на page и любой другой
         const path = hash.split("?")[0];
-        const query = hash.split("&")[1];
+        const query = hash.split("?")[1];
         switch (path) {
             case "#multiplayer":
                 this.multiPlayerStart(query);
@@ -97,6 +99,10 @@ export class Main {
         if (!query) {
             this.multiPlayer.start();
             SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
+        } else {
+            console.log("query!");
+            SocketHandler.instance.authorization("guest");
+            SocketHandler.instance.guestJoin(query.split("=")[1]);
         }
     }
 }

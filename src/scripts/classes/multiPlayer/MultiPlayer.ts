@@ -1,6 +1,7 @@
 import { MultuPlayerElems } from "../../types/interfaces";
 import { RenderMultiPlayer } from "../rendering/RenderMultiPlayer";
 import { SocketHandler } from "../SocketHandler";
+import { Utilities } from "../Utilities";
 
 export class MultiPlayer {
     container: HTMLElement;
@@ -26,5 +27,19 @@ export class MultiPlayer {
 
     randomOpponent() {
         SocketHandler.instance.randomOpponent();
+    }
+
+    createLink() {
+        const userId = SocketHandler.instance.socket.id;
+        const base = "http://localhost:8080";
+        const link = `${base}/#multiplayer?room=${userId}`;
+        this.elems.linkBody.textContent = link;
+        // SocketHandler.instance.sendLink(userId);
+    }
+
+    async copyLink() {
+        if (this.elems.linkBody.textContent) {
+            await window.navigator.clipboard.writeText(this.elems.linkBody.textContent);
+        }
     }
 }
