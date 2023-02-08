@@ -20,12 +20,11 @@ export class Main {
         if (!(container instanceof HTMLElement)) return;
         this.container = container;
         RenderMainPage.renderMainPage(this.container);
-        this.socketHandler = new SocketHandler(overlay);
-        this.socketHandler.start();
+        SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
-        window.addEventListener("beforeunload", this.socketHandler.saveToLocalStorage.bind(this));
+        window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener(
             "hashchange",
             () => {
@@ -53,7 +52,9 @@ export class Main {
         //Multiplayer Page events
 
         if (e.target.classList.contains("main__multiplayer-button")) this.toMultiPlayerPage();
-        if (e.target.classList.contains("chat__button")) this.sendToChat();
+        if (e.target.classList.contains("chat__button")) this.multiPlayer.send();
+        if (e.target.classList.contains("random-opponent-button")) this.multiPlayer.randomOpponent();
+        if (e.target.classList.contains("loading-window__button")) SocketHandler.instance.cancelMathcMaking();
     }
 
     appRouting(hash: string) {
@@ -79,12 +80,12 @@ export class Main {
         const email = elems.emailInput.value;
         if (elem.classList.contains("login-mode")) {
             if (!accName || !pass) return;
-            this.socketHandler.authorization("login", accName, pass);
+            SocketHandler.instance.authorization("login", accName, pass);
         }
         if (elem.classList.contains("reg-mode")) {
             if (!accName || !pass || !passConfirm || !email) return;
             if (pass !== passConfirm) return;
-            this.socketHandler.authorization("reg", accName, pass, email);
+            SocketHandler.instance.authorization("reg", accName, pass, email);
         }
     }
 
@@ -95,15 +96,7 @@ export class Main {
     multiPlayerStart(query: string | undefined) {
         if (!query) {
             this.multiPlayer.start();
-            this.socketHandler.currentChat = this.multiPlayer.elems.chatBody;
-        }
-    }
-
-    sendToChat() {
-        if (this.multiPlayer.elems.chatInput.value) {
-            console.log(this.multiPlayer.elems.chatInput.value);
-            this.socketHandler.currentChat = this.multiPlayer.elems.chatBody;
-            this.socketHandler.sendToChat(this.multiPlayer.elems.chatInput.value);
+            SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
         }
     }
 }

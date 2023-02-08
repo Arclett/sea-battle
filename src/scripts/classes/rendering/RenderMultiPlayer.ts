@@ -13,6 +13,12 @@ export class RenderMultiPlayer {
             content: "Find your opponent",
         });
 
+        const random = Element.createElement({
+            tag: "button",
+            classNote: "random-opponent-button",
+            content: "Random opponent",
+        });
+
         const findWrapper = Element.createElement({ tag: "div", classNote: "find-opponent" });
 
         const findTitle = Element.createElement({
@@ -69,7 +75,7 @@ export class RenderMultiPlayer {
 
         chatWrapper.append(chatTitle, chatBody, chatInput, chatButton);
 
-        wrapper.append(findWrapper, chatWrapper, linkWrapper);
+        wrapper.append(random, chatWrapper, findWrapper, linkWrapper);
         container.append(title, wrapper);
 
         return {
