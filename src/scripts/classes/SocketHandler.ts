@@ -18,6 +18,8 @@ export class SocketHandler {
 
     currentChat: HTMLElement;
 
+    opponent: string;
+
     constructor() {
         const overlay = document.querySelector(".login__server-overlay");
         if (!(overlay instanceof HTMLElement)) return;
@@ -70,7 +72,8 @@ export class SocketHandler {
 
         this.socket.on("start battle", (opponent: string) => {
             this.hideOverlay();
-            console.log(`user with id: ${this.socket.id}(me) starting battle with opponent id: ${opponent}`);
+            this.opponent = opponent;
+            window.location.href = "#play-field";
         });
     }
 

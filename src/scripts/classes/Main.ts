@@ -1,7 +1,7 @@
 import { LoginWindow } from "./loginWindow/LoginWindow";
 import { MultiPlayer } from "./multiPlayer/MultiPlayer";
+import { PlayField } from "./PlayField/PlayField";
 import { RenderMainPage } from "./rendering/RenderMainPage";
-import { SinglePlay } from "./singlPlay/SinglePlay";
 import { SocketHandler } from "./SocketHandler";
 
 export class Main {
@@ -10,6 +10,8 @@ export class Main {
     socketHandler: SocketHandler;
 
     multiPlayer: MultiPlayer;
+
+    playField: PlayField;
 
     container: HTMLElement;
 
@@ -23,6 +25,7 @@ export class Main {
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
+        this.playField = new PlayField(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener(
@@ -66,6 +69,10 @@ export class Main {
         switch (path) {
             case "#multiplayer":
                 this.multiPlayerStart(query);
+                break;
+
+            case "#play-field":
+                this.playField.start();
                 break;
 
             default:
