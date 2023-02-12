@@ -56,6 +56,14 @@
   margin-top: 20px;
 }
 
+.trash:hover {
+  cursor: pointer;
+}
+
+.trash:active {
+  cursor: pointer;
+}
+
 .circleArrow:hover {
   cursor: pointer;
 }
@@ -70,4 +78,8 @@
 
 .vertical {
   height: auto;
+}
+
+#boat__container {
+  height: 33px;
 }

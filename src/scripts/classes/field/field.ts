@@ -1,3 +1,4 @@
+import { SmallBackground } from "../../types/interfaces";
 import { Element } from "../element/element";
 
 export class Field {
@@ -6,9 +7,11 @@ export class Field {
   createEmptyField() {
     const controlMenu = Element.createElement({ tag: 'div', classNote: 'controlMenu__container' });
     const circleArrow = Element.createImage({ src: '../../../assets/images/circle-arrow.png', alt: 'left-right', classNote: 'circleArrow', width: 150})
+    const backShips = Element.createImage({ src: '../../../assets/images/trash.png', alt: 'trash', classNote: 'trash', width: 150 })
     const fieldContainer = Element.createElement({ tag: 'div', classNote: 'field__container' });
     circleArrow.addEventListener('click', this.changeOrientationShips);
-    controlMenu.appendChild(circleArrow);
+    backShips.addEventListener('click', this.backAllShips);
+    controlMenu.append(circleArrow, backShips);
     document.getElementsByClassName('wrapper main__wrapper')[0].append(fieldContainer, controlMenu);
     const listOfShips = Element.createElement({ tag: 'div', id: 'list__shipsHorizontal' });
     const field = Element.createElement({ tag: 'div', id: 'field' });
@@ -48,9 +51,11 @@ export class Field {
     this.createEmptyField();
   }
 
+  backAllShips() {
+
+  }
+
   changeOrientationShips() {
-    //console.log(document.getElementById('list__shipsHorizontal'));
-    
     let container = document.getElementById('list__shipsHorizontal');
     if (container === null) {
       container = document.getElementById('list__shipsVertical');
@@ -60,7 +65,6 @@ export class Field {
       changeOrientationToVertical();
       container.id = 'list__shipsVertical';
     } else {
-      //console.log('asd')
       changeOrientationToHorizontal();
       container.id = 'list__shipsHorizontal';
     }
@@ -177,7 +181,10 @@ export class Field {
     }
   }
 
-  
+  moveAt(img: HTMLImageElement, pageX: number, pageY: number, shiftX: number, shiftY: number) {
+    img.style.left = pageX - shiftX + 'px';
+    img.style.top = pageY - shiftY + 'px';
+  }
 
   dragAndDropShip(img: HTMLImageElement) {
     let shiftX = 0;
@@ -188,40 +195,38 @@ export class Field {
     let orientation: string;
     let currentDroppable: HTMLElement | null = null;
     img.onmousedown = (event) => {
-      img.width > 33 ? orientation = 'horizontal' : orientation = 'vertical';
+      img.width >= 33 ? orientation = 'horizontal' : orientation = 'vertical';
       shiftX = event.clientX - img.getBoundingClientRect().left;
       shiftY = event.clientY - img.getBoundingClientRect().top;
       img.style.position = 'absolute';
       img.style.zIndex = '1000';
 
-      //document.body.append(img);
-      moveAt(event.pageX, event.pageY);
+      this.moveAt(img, event.pageX, event.pageY, shiftX, shiftY);
+      //moveAt(img, event.pageX, event.pageY, shiftX, shiftY);
 
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onmouseup);
       let elemBelow = document.elementFromPoint(event.clientX - shiftX + 16, event.clientY - shiftY + 16) as HTMLElement;
       let droppableBelow = elemBelow.closest('.droppable') as HTMLElement;
-      //console.log(droppableBelow);
       if (orientation === 'horizontal') {
         removeShipFromFieldHorizontal(droppableBelow);
       } else {
         removeShipFromFieldVertical(droppableBelow);
       }
-      //console.log(droppableBelow);
       deleteBackgroundAroundShip(droppableBelow);
     };
 
-    function moveAt(pageX: number, pageY: number) {
-      img.style.left = pageX - shiftX + 'px';
-      img.style.top = pageY - shiftY + 'px';
-    }
+    // function moveAt(img:HTMLImageElement ,pageX: number, pageY: number, shiftX: number, shiftY: number) {
+    //   img.style.left = pageX - shiftX + 'px';
+    //   img.style.top = pageY - shiftY + 'px';
+    // }
 
-    function onMouseMove(event: MouseEvent) {
-      //const orientation = img.height > img.width ? 'vertical' : 'horizontal';
-      moveAt(event.pageX, event.pageY);
+    const onMouseMove = (event: MouseEvent) => {
+      const orientationMove = getOrientationShip(img).orient;
+      this.moveAt(img, event.pageX, event.pageY, shiftX, shiftY);
+      //moveAt(img, event.pageX, event.pageY, shiftX, shiftY);
       img.hidden = true;
       let elemBelow = document.elementFromPoint(event.clientX - shiftX + 16, event.clientY - shiftY + 16) as HTMLElement;
-      //console.log()
       let right = document.elementFromPoint(img.width + +img.style.left.slice(0, -2) - 16, img.height + +img.style.top.slice(0, -2) - 16) as HTMLElement;
 
       let rightDropp = null;
@@ -233,7 +238,7 @@ export class Field {
       
       if (!elemBelow) return;
       let droppableBelow = elemBelow.closest('.droppable') as HTMLElement;
-      if (orientation === 'horizontal') {
+      if (orientationMove === 'horizontal') {
         if (currentDroppable != droppableBelow || currentDroppable != rightDropp) {
           if (currentDroppable) {
             leaveDroppableHorizontal(currentDroppable);
@@ -276,13 +281,13 @@ export class Field {
 
     function onmouseup(event: MouseEvent) {
       //const orientation = img.height > img.width ? 'vertical' : 'horizontal';
+      const orientationMouseUp =  getOrientationShip(img).orient;
       if (img.style.position === 'absolute') {
         document.removeEventListener('mousemove', onMouseMove);
         img.hidden = true;
         let elemBelow = document.elementFromPoint(event.clientX - shiftX + 16, event.clientY - shiftY + 16) as HTMLElement;
         img.hidden = false;
         let field: boolean | null = null;
-        let shipyard: HTMLElement | null = null;
         if (img.style.left > '0' && img.style.top > '0') {
           if (elemBelow.style.boxShadow == 'grey 0px 0px 4em 4em inset' && elemBelow.style.background !== 'pink') {
             field = true;
@@ -291,8 +296,7 @@ export class Field {
           if (newBelow.classList.contains('ship')) {
             field = null;
           } else {
-            //console.log(newBelow);
-            if (orientation === 'horizontal') {
+            if (orientationMouseUp === 'horizontal') {
               for (let i = 0; i < shipWidth; i++) {
                 if (newBelow !== null) {
                   if ((newBelow as HTMLElement).style.background === 'pink') {
@@ -303,13 +307,10 @@ export class Field {
               }
             } else {
               for (let i = 0; i < shipWidth; i++) {
-                //console.log(newBelow);
                 if (newBelow!== null) {
                   if (newBelow.classList.contains('droppable')) {
-                    //console.log('tut')
                     if ((newBelow as HTMLElement).style.background === 'pink') {
                       field = null;
-                      //console.log(field)
                     }
                   }
                 }
@@ -322,9 +323,7 @@ export class Field {
             }
           }
         }
-        //console.log(orientation);
-        //console.log(field);
-        if (orientation === 'horizontal') {
+        if (orientationMouseUp === 'horizontal') {
           if (field !== null) {
             elemBelow.append(img);
             img.style.position = 'relative';
@@ -334,13 +333,12 @@ export class Field {
             addShipToFieldHorizontal(elemBelow);
             if (!elemBelow) return;
             elemBelow.classList.remove('newship');
-            renderAroundShipHorizontal();
+            renderAroundShip();
             leaveDroppableHorizontal(elemBelow);
           } else {
             let droppableBelow = elemBelow.closest('.droppable') as HTMLElement;
             if (droppableBelow !== null) {
               let overShip = document.elementsFromPoint(event.clientX - shiftX + 16, event.clientY - shiftY + 16)[2];
-              //console.log(overShip);
               if (overShip.classList.contains('droppable')) {
                 droppableBelow = overShip as HTMLElement;
               }
@@ -358,13 +356,12 @@ export class Field {
             addShipToFieldVertical(elemBelow);
             if (!elemBelow) return;
             elemBelow.classList.remove('newship');
-            renderAroundShipVertical();
+            renderAroundShip();
             leaveDroppableVertical(elemBelow);
           } else {
             let droppableBelow = elemBelow.closest('.droppable') as HTMLElement;
             if (droppableBelow !== null) {
               let overShip = document.elementsFromPoint(event.clientX - shiftX + 16, event.clientY - shiftY + 16)[2];
-              //console.log(overShip);
               if (overShip.classList.contains('droppable')) {
                 droppableBelow = overShip as HTMLElement;
               }
@@ -377,24 +374,26 @@ export class Field {
     }
 
     function getShipsCoordinates() {
-      const coordinatesOfShips: number[][] = [];
+      let coordinatesOfShips: number[][] = [];
         let countSihps: number = -1;
         document.getElementById('field')?.childNodes.forEach((element, index) => {
           if ((element as HTMLElement).classList.contains('ship__active')) {
-            //console.log(element);
             if (element.hasChildNodes()) {
               coordinatesOfShips.push([]);
               countSihps += 1;
               let el = (element.firstChild as HTMLImageElement);
-              let orient = el.height > el.width ? 'vertical' : 'horizontal';
-              let lengthShip = el.width > el.height ? el.width / 33 : el.height / 33;
-              //console.log(orient);
-              //console.log(lengthShip);
+              const OrientationShip = getOrientationShip(el);
+              const orient = OrientationShip.orient;
+              const lengthShip = OrientationShip.lengthShip;
+              if (orient === 'middle') {
+                coordinatesOfShips[countSihps].push(index);
+              }
               if (orient === 'horizontal') {
                 for (let i = 0; i < lengthShip; i++) {
                   coordinatesOfShips[countSihps].push(index + i);
                 }
-              } else {
+              }
+              if (orient === 'vertical') {
                 for (let i = 0; i < lengthShip; i++) {
                   coordinatesOfShips[countSihps].push(index + 10 * i);
                 }
@@ -402,8 +401,26 @@ export class Field {
             }
           }
         });
-        console.log(coordinatesOfShips)
+        //console.log(coordinatesOfShips)
       return coordinatesOfShips;
+    }
+
+    function getOrientationShip(el: HTMLImageElement) {
+      let heightShip = Math.floor(el.height);
+      if (heightShip === 34) {heightShip = 33;}
+      let widthShip = Math.floor(el.width);
+      let orient: string = '';
+      if (heightShip === widthShip) {
+        orient = 'middle';
+      }
+      if (heightShip > widthShip) {
+        orient = 'vertical';
+      }
+      if (heightShip < widthShip) {
+        orient = 'horizontal';
+      }
+      let lengthShip = widthShip > heightShip ? widthShip / 33 : heightShip / 33;
+      return {orient, lengthShip}
     }
 
     function addShipToFieldHorizontal(element: HTMLElement) {
@@ -443,21 +460,23 @@ export class Field {
           for (let i = 0; i < 10; i++) {
             el = el.nextElementSibling as HTMLElement;
           }
-          //console.log(el);
           el.classList.remove('ship__active');
         }
     }
     }
 
     function returnShip() {
+      
       img.style.position = 'relative';
       img.style.left = '0px';
       img.style.top = '0px';
-      //console.log(orientation);
-      if (document.getElementById('list__shipsVertical') && orientation == 'horizontal') {
+      
+      const orientationShip = getOrientationShip(img);
+      //console.log(orientationShip);
+      if (document.getElementById('list__shipsVertical') && orientationShip.orient == 'horizontal') {
         changeShipOrientationToVertical();
       }
-      if (document.getElementById('list__shipsHorizontal') && orientation == 'vertical') {
+      if (document.getElementById('list__shipsHorizontal') && orientationShip.orient == 'vertical') {
         changeShipOrientationToHorizontal();
       }
       if (img.classList.contains('battleship')) {
@@ -565,11 +584,12 @@ export class Field {
     }
 
     function deleteBackgroundAroundShip(element: HTMLElement) {
+      const deleteOrientation = getOrientationShip(img).orient;
       if (element !== null) {
-        if (orientation === 'horizontal') {
-          renderAroundShipHorizontal();
+        if (deleteOrientation === 'horizontal') {
+          renderAroundShip()
         } else {
-          renderAroundShipVertical();
+          renderAroundShip();
         }
       }
     }
@@ -579,19 +599,28 @@ export class Field {
     }
 
     function renderAroundShip() {
-      renderAroundShipHorizontal();
-      renderAroundShipVertical();
-    }
-
-    function renderAroundShipHorizontal() {
-      document.getElementById('field')?.childNodes.forEach((element, index) => {
+      document.getElementById('field')?.childNodes.forEach((element) => {
         (element as HTMLElement).style.background = '';
       });
       const coordinatesAroundShips = getShipsCoordinates();
-      //console.log(coordinatesAroundShips);
       coordinatesAroundShips.forEach((ship) => {
+        //console.log(ship)
+        if (ship[1] === ship[0] + 1) {
           ship.unshift(ship[0] - 1);
           ship.push(ship[ship.length - 1] + 1);
+          renderAroundShipHorizontal(ship);
+        } else if (ship.length === 1) {
+          renderAroundSmallShip(ship);
+        } else {
+          
+          renderAroundShipVertical(ship);
+        }
+      });
+      
+      
+    }
+
+    function renderAroundShipHorizontal(ship: number[]) {
           if (ship[0] < 9 && ship[0] + 1 !== 0 && ship[0] + ship.length - 2 !== 9) {
             ship.forEach((el) => {
               document.getElementById('field')?.childNodes.forEach((element, index) => {
@@ -721,11 +750,187 @@ export class Field {
                 });
             });
           }
-      });
     }
 
-    function renderAroundShipVertical() {
-      const coordinatesAroundShips = getShipsCoordinates();
+    function renderAroundSmallShip(ship: number[]) {
+      const smallShip = ship[0];
+      if (smallShip === 0) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip + 1,
+          third: smallShip + 10,
+          fourth: smallShip + 11,
+        });
+      } else
+      if (smallShip === 9) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip - 1,
+          third: smallShip + 10,
+          fourth: smallShip + 9,
+        });
+      } else
+      if (smallShip === 90) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip + 1,
+          third: smallShip - 10,
+          fourth: smallShip - 9,
+        });
+      }else
+      if (smallShip === 99) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip - 1,
+          third: smallShip - 10,
+          fourth: smallShip - 11,
+        });
+      } else
+      if (smallShip > 0 && smallShip < 9) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip + 1,
+          third: smallShip - 1,
+          fourth: smallShip + 10,
+          fifth: smallShip + 9,
+          sixth: smallShip + 11,
+        });
+      } else
+      if (smallShip > 90 && smallShip < 99) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip + 1,
+          third: smallShip - 1,
+          fourth: smallShip - 10,
+          fifth: smallShip - 9,
+          sixth: smallShip - 11,
+        });
+      } else
+      if (smallShip % 10 === 0) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip + 1,
+          third: smallShip - 9,
+          fourth: smallShip - 10,
+          fifth: smallShip + 10,
+          sixth: smallShip + 11,
+        });
+      } else
+      if (smallShip % 10 === 9) {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip - 1,
+          third: smallShip + 9,
+          fourth: smallShip - 10,
+          fifth: smallShip + 10,
+          sixth: smallShip - 11,
+        });
+      } else {
+        addBackgroundAroundSmallShip({
+          first: smallShip,
+          second: smallShip - 1,
+          third: smallShip + 1,
+          fourth: smallShip - 9,
+          fifth: smallShip + 9,
+          sixth: smallShip - 10,
+          seventh: smallShip + 10,
+          eighth: smallShip - 11,
+          ninth: smallShip + 11,
+        });
+      }
+    }
+
+    function addBackgroundAroundSmallShip({first, second, third, fourth, fifth, sixth, seventh, eighth, ninth}: SmallBackground) {
+      const cellsShip = document.getElementsByClassName('droppable');
+      (cellsShip[first] as HTMLElement).style.background = 'pink';
+      (cellsShip[second] as HTMLElement).style.background = 'pink';
+      (cellsShip[third] as HTMLElement).style.background = 'pink';
+      (cellsShip[fourth] as HTMLElement).style.background = 'pink';
+      if (fifth) {
+        (cellsShip[fifth] as HTMLElement).style.background = 'pink';
+      }
+      if (sixth) {
+        (cellsShip[sixth] as HTMLElement).style.background = 'pink';
+      }
+      if (seventh) {
+        (cellsShip[seventh] as HTMLElement).style.background = 'pink';
+      }
+      if (eighth) {
+        (cellsShip[eighth] as HTMLElement).style.background = 'pink';
+      }
+      if (ninth) {
+        (cellsShip[ninth] as HTMLElement).style.background = 'pink';
+      }
+    }
+
+    function renderAroundShipVertical(ship: number[]) {
+      const smallShip = ship[0];
+      const shipLength = ship.length;
+      if (smallShip > 9) {
+        ship.unshift(ship[0] - 10);
+      }
+      if (smallShip < 100 - ((ship.length - 1) * 10)) {
+        ship.push(ship[ship.length - 1] + 10);
+      }
+      const cellsShip = document.getElementsByClassName('droppable');
+      console.log(shipLength)
+      if (smallShip === 0) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el + 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (smallShip === 9) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el - 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (ship[0] + (shipLength * 10) === 90) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el + 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (ship[0] + (shipLength * 10) === 99) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el - 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (smallShip > 0 && smallShip < 9) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el - 1] as HTMLElement).style.background = 'pink';
+          (cellsShip[el + 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (ship[0] + (shipLength * 10) > 90 && ship[0] + (shipLength * 10) < 99) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el - 1] as HTMLElement).style.background = 'pink';
+          (cellsShip[el + 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (ship[0] % 10 === 0) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el + 1] as HTMLElement).style.background = 'pink';
+        });
+      } else
+      if (ship[0] % 10 === 9) {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el - 1] as HTMLElement).style.background = 'pink';
+        });
+      } else {
+        ship.forEach((el) => {
+          (cellsShip[el] as HTMLElement).style.background = 'pink';
+          (cellsShip[el - 1] as HTMLElement).style.background = 'pink';
+          (cellsShip[el + 1] as HTMLElement).style.background = 'pink';
+        });
+      }
+      
     }
 
     img.ondragstart = function() {
