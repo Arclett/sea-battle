@@ -12,3 +12,13 @@ export enum EnterButtonText {
     regMode = "Create",
     logMode = "Enter",
 }
+
+export enum WaitingWindowType {
+    connect = "connect",
+    opponent = "opponent",
+}
+
+export enum WaitingWindowText {
+    connect = "Connecting to server. Please wait",
+    opponent = "Waiting for your opponent",
+}

@@ -37,3 +37,8 @@ export interface GetUserData {
     currentShipSkin: string;
     currentFieldSkin: string;
 }
+export interface MultuPlayerElems {
+    chatInput: HTMLInputElement;
+    chatBody: HTMLElement;
+    linkBody: HTMLElement;
+}

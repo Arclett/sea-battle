@@ -1,8 +1,13 @@
 import { io, Socket } from "socket.io-client";
+import { WaitingWindowType } from "../types/enums";
 import { GetUserData } from "../types/interfaces";
 import { Constants } from "./Constants";
+import { RenderWaitingWindow } from "./rendering/RenderLoadWindow";
+import { RenderMultiPlayer } from "./rendering/RenderMultiPlayer";
 
 export class SocketHandler {
+    static instance: SocketHandler;
+
     socket: Socket;
 
     authToken: string | undefined;
@@ -11,7 +16,13 @@ export class SocketHandler {
 
     userData: GetUserData | undefined;
 
-    constructor(overlay: HTMLElement) {
+    currentChat: HTMLElement;
+
+    opponent: string;
+
+    constructor() {
+        const overlay = document.querySelector(".login__server-overlay");
+        if (!(overlay instanceof HTMLElement)) return;
         this.overlay = overlay;
     }
 
@@ -25,7 +36,7 @@ export class SocketHandler {
 
     authorization(token: string, userName?: string, password?: string, email?: string) {
         console.log(token);
-        this.overlay.classList.remove("hidden");
+        this.showOverlay(WaitingWindowType.connect);
         this.socket = io(Constants.serverUrl, {
             transportOptions: {
                 polling: {
@@ -40,7 +51,7 @@ export class SocketHandler {
         });
 
         this.socket.on("auth token", (token: string, user: GetUserData) => {
-            this.overlay.classList.add("hidden");
+            this.hideOverlay();
             this.authToken = token;
             this.saveToLocalStorage();
             console.log("connected");
@@ -51,15 +62,23 @@ export class SocketHandler {
         });
 
         this.socket.on("connect_error", (err: Error) => {
-            this.overlay.classList.add("hidden");
+            this.hideOverlay();
             console.log(err.message);
+        });
+
+        this.socket.on("chat message", (text: string) => {
+            if (this.currentChat) RenderMultiPlayer.renderMessage(this.currentChat, text);
+        });
+
+        this.socket.on("start battle", (opponent: string) => {
+            this.hideOverlay();
+            this.opponent = opponent;
+            window.location.href = "#play-field";
         });
     }
 
-    socketListners(socket: Socket) {
-        socket.on("hello", () => {
-            console.log("connected");
-        });
+    sendToChat(text: string) {
+        this.socket.emit("send to chat", text);
     }
 
     getLocalStorage(dataName: string) {
@@ -69,5 +88,35 @@ export class SocketHandler {
 
     saveToLocalStorage() {
         if (this.authToken) localStorage.setItem("authToken", this.authToken);
+    }
+
+    randomOpponent() {
+        if (!this.userData) return;
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("find random", this.userData.userName);
+    }
+
+    cancelMathcMaking() {
+        this.socket.emit("cancel");
+        this.hideOverlay();
+    }
+
+    showOverlay(type: WaitingWindowType) {
+        RenderWaitingWindow.renderAwaitWindow(this.overlay, type);
+        this.overlay.classList.remove("hidden");
+    }
+    hideOverlay() {
+        this.overlay.classList.add("hidden");
+        this.overlay.replaceChildren();
+    }
+
+    sendLink(link: string) {
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("send link", link);
+    }
+
+    guestJoin(id: string) {
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("join by link", id);
     }
 }
