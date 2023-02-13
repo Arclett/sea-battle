@@ -1,6 +1,6 @@
 import { LoginWindow } from "./loginWindow/LoginWindow";
 import { SocketHandler } from "./SocketHandler";
-import { Field } from "./field/field";
+import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
 
 export class Main {
     loginWindow: LoginWindow;
@@ -12,7 +12,7 @@ export class Main {
         this.socketHandler.start();
         this.loginWindow = new LoginWindow();
         document.body.addEventListener("click", this.clickHandler.bind(this));
-        new Field().render();
+        new GUIShipsPlacement().renderShipsPlacement();
         this.appRouting(location.hash);
     }
 
