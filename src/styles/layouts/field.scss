@@ -12,6 +12,13 @@
   box-sizing: content-box;
 }
 
+#list__shipsVertical {
+  display: grid;
+  width: 220px;
+  border: 2px solid rgb(55, 0, 255);
+  box-sizing: content-box;
+}
+
 #field {
   border: 2px solid rgb(55, 0, 255);
   display: grid;
@@ -82,4 +89,19 @@
 
 #boat__container {
   height: 33px;
+}
+
+.random:hover {
+  cursor: pointer;
+}
+
+#startGame {
+  margin-top: 20px;
+  width: 1000px;
+  height: 50px;
+  background: rgb(178, 173, 173);
+}
+
+#startGame:hover {
+  cursor: pointer;
 }
