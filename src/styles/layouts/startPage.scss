@@ -1,0 +1,49 @@
+.gameMenu__container {
+  display: flex;
+  gap: 50px;
+  padding-top: 200px;
+}
+
+.singleGame__container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.multiGame__container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+button {
+  border: 0;
+  outline: 0;
+  background: #191996;
+  border-radius: 40px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #fff;
+  line-height: 2.5rem;
+  box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+}
+
+button:hover {
+  cursor: pointer;
+  background: #1919B9;
+}
+
+button:active {
+  transform: scale(1.03);
+}
+
+.startField {
+  width: 250px;
+  margin: 0 auto;
+}
+
+.shipsImages {
+  width: 100%;
+}

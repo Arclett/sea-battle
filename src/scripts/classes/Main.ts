@@ -3,6 +3,8 @@ import { MultiPlayer } from "./multiPlayer/MultiPlayer";
 import { PlayField } from "./PlayField/PlayField";
 import { RenderMainPage } from "./rendering/RenderMainPage";
 import { SocketHandler } from "./SocketHandler";
+import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
+import { GUIStartPage } from "./GUI/GUIStartPage";
 
 export class Main {
     loginWindow: LoginWindow;
@@ -27,6 +29,7 @@ export class Main {
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
+        new GUIStartPage().renderStartPag();
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener(
             "hashchange",
@@ -48,9 +51,10 @@ export class Main {
         if (e.target.classList.contains("round-button__link") || e.target.classList.contains("round-button__text")) {
             this.loginWindow.start();
         }
-        if (e.target.classList.contains("login__overlay")) this.loginWindow.closeWindow();
+        if (e.target.classList.contains("login__overlay")) location.hash = '';
         if (e.target.classList.contains("login__enter-button")) this.authorization(e.target);
         if (e.target.classList.contains("login__regist-button")) this.loginWindow.switchLoginWindowMode(e.target);
+
 
         //Multiplayer Page events
 
@@ -73,6 +77,9 @@ export class Main {
 
             case "#play-field":
                 this.playField.start();
+                break;
+            case '#shipsPlacement':
+                new GUIShipsPlacement().renderShipsPlacement();
                 break;
 
             default:
