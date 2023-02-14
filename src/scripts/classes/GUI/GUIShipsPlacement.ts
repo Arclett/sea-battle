@@ -14,6 +14,7 @@ export class GUIShipsPlacement{
   private ShipControl = new ShipsControl();
   
   renderShipsPlacement() {
+    document.getElementsByClassName('wrapper main__wrapper')[0].innerHTML = '';
     const controlMenu = Element.createElement({ tag: 'div', classNote: 'controlMenu__container' });
     const circleArrow = Element.createImage({ src: imagesPlacementMenu.circleArrow, alt: 'left-right', classNote: 'circleArrow', width: 150});
     const backShips = Element.createImage({ src: imagesPlacementMenu.clearField, alt: 'trash', classNote: 'trash', width: 150 });

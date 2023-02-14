@@ -1,6 +1,7 @@
 import { LoginWindow } from "./loginWindow/LoginWindow";
 import { SocketHandler } from "./SocketHandler";
 import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
+import { GUIStartPage } from "./GUI/GUIStartPage";
 
 export class Main {
     loginWindow: LoginWindow;
@@ -12,7 +13,8 @@ export class Main {
         this.socketHandler.start();
         this.loginWindow = new LoginWindow();
         document.body.addEventListener("click", this.clickHandler.bind(this));
-        new GUIShipsPlacement().renderShipsPlacement();
+        //new GUIShipsPlacement().renderShipsPlacement();
+        new GUIStartPage().renderStartPag();
         this.appRouting(location.hash);
     }
 
@@ -40,6 +42,9 @@ export class Main {
                 break;
             case '#?game=':
 
+                break;
+            case '#shipsPlacement':
+                new GUIShipsPlacement().renderShipsPlacement();
                 break;
         
             default:
