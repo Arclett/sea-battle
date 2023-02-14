@@ -11,6 +11,7 @@
 @import "components/header";
 @import "components/round-button";
 @import "./components/login-popup.scss";
+@import "./components/loading-window.scss";
 
 @import "components/footer";
 
@@ -18,6 +19,7 @@
 @import "layouts/wrapper";
 @import "layouts/field";
 @import "layouts/startPage";
+@import "./layouts/multiplayer.scss";
 
 // fonts //
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap");

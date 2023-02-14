@@ -1,25 +1,42 @@
 import { io, Socket } from "socket.io-client";
+import { WaitingWindowType } from "../types/enums";
+import { GetUserData } from "../types/interfaces";
 import { Constants } from "./Constants";
+import { RenderWaitingWindow } from "./rendering/RenderLoadWindow";
+import { RenderMultiPlayer } from "./rendering/RenderMultiPlayer";
 
 export class SocketHandler {
-    userName: string | undefined;
+    static instance: SocketHandler;
 
     socket: Socket;
 
     authToken: string | undefined;
 
+    overlay: HTMLElement;
+
+    userData: GetUserData | undefined;
+
+    currentChat: HTMLElement;
+
+    opponent: string;
+
+    constructor() {
+        const overlay = document.querySelector(".login__server-overlay");
+        if (!(overlay instanceof HTMLElement)) return;
+        this.overlay = overlay;
+    }
+
     start() {
-        this.userName = this.getLocalStorage("userName");
         this.authToken = this.getLocalStorage("authToken");
-        if (this.userName && this.authToken) {
-            this.authorization(this.userName, this.authToken);
-            window.addEventListener("beforeunload", this.saveToLocalStorage.bind(this));
+        if (this.authToken) {
+            this.authorization(this.authToken);
             return this.socket;
         }
     }
 
-    authorization(userName: string, token: string, password?: string, email?: string) {
+    authorization(token: string, userName?: string, password?: string, email?: string) {
         console.log(token);
+        this.showOverlay(WaitingWindowType.connect);
         this.socket = io(Constants.serverUrl, {
             transportOptions: {
                 polling: {
@@ -33,22 +50,35 @@ export class SocketHandler {
             },
         });
 
-        this.socket.on("auth token", (data: string, user: {}) => {
-            this.authToken = data;
+        this.socket.on("auth token", (token: string, user: GetUserData) => {
+            this.hideOverlay();
+            this.authToken = token;
+            this.saveToLocalStorage();
             console.log("connected");
-            console.log(data);
-            console.log(user);
+            console.log(`Hello ${user.userName}`);
+            this.userData = user;
+            const text = document.querySelector(".round-button__text");
+            if (text instanceof HTMLElement) text.textContent = user.userName;
         });
 
         this.socket.on("connect_error", (err: Error) => {
+            this.hideOverlay();
             console.log(err.message);
+        });
+
+        this.socket.on("chat message", (text: string) => {
+            if (this.currentChat) RenderMultiPlayer.renderMessage(this.currentChat, text);
+        });
+
+        this.socket.on("start battle", (opponent: string) => {
+            this.hideOverlay();
+            this.opponent = opponent;
+            window.location.href = "#play-field";
         });
     }
 
-    socketListners(socket: Socket) {
-        socket.on("hello", () => {
-            console.log("connected");
-        });
+    sendToChat(text: string) {
+        this.socket.emit("send to chat", text);
     }
 
     getLocalStorage(dataName: string) {
@@ -57,7 +87,36 @@ export class SocketHandler {
     }
 
     saveToLocalStorage() {
-        if (this.userName) localStorage.setItem("userName", this.userName);
         if (this.authToken) localStorage.setItem("authToken", this.authToken);
+    }
+
+    randomOpponent() {
+        if (!this.userData) return;
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("find random", this.userData.userName);
+    }
+
+    cancelMathcMaking() {
+        this.socket.emit("cancel");
+        this.hideOverlay();
+    }
+
+    showOverlay(type: WaitingWindowType) {
+        RenderWaitingWindow.renderAwaitWindow(this.overlay, type);
+        this.overlay.classList.remove("hidden");
+    }
+    hideOverlay() {
+        this.overlay.classList.add("hidden");
+        this.overlay.replaceChildren();
+    }
+
+    sendLink(link: string) {
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("send link", link);
+    }
+
+    guestJoin(id: string) {
+        this.showOverlay(WaitingWindowType.opponent);
+        this.socket.emit("join by link", id);
     }
 }

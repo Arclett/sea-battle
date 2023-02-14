@@ -48,3 +48,13 @@ export enum shipsLength {
     boat = 33,
     WidthAllShips = 33,
 }
+
+export enum WaitingWindowType {
+    connect = "connect",
+    opponent = "opponent",
+}
+
+export enum WaitingWindowText {
+    connect = "Connecting to server. Please wait",
+    opponent = "Waiting for your opponent",
+}

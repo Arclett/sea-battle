@@ -51,3 +51,15 @@ export interface SmallBackground {
     ninth?: number;
 }
 
+export interface GetUserData {
+    userName: string;
+    userGold: number;
+    currentFrame: string;
+    currentShipSkin: string;
+    currentFieldSkin: string;
+}
+export interface MultuPlayerElems {
+    chatInput: HTMLInputElement;
+    chatBody: HTMLElement;
+    linkBody: HTMLElement;
+}
