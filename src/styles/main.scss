@@ -12,12 +12,14 @@
 @import "components/round-button";
 @import "./components/login-popup.scss";
 @import "./components/loading-window.scss";
+@import "./components/account-info.scss";
 
 @import "components/footer";
 
 // layouts //
 @import "layouts/wrapper";
 @import "./layouts/multiplayer.scss";
+@import "./layouts/account.scss";
 
 // fonts //
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap");

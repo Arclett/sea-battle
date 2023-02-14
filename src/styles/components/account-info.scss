@@ -1,0 +1,16 @@
+.gallery-wrapper__filters {
+    display: flex;
+    font-size: 20px;
+    margin: 20px;
+    justify-content: space-between;
+}
+
+.gallery-wrapper__gallery {
+    display: flex;
+    flex-wrap: wrap;
+    .gallery__skin-icon,
+    .gallery__field-icon {
+        height: 100px;
+        background-color: white;
+    }
+}

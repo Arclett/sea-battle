@@ -1,0 +1,12 @@
+.wrapper {
+    .account__title {
+        height: 30px;
+        @include centered;
+        margin-top: 50px;
+    }
+    .account__info {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+}

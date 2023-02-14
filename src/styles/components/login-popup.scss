@@ -18,13 +18,10 @@
         flex-direction: column;
         gap: 10px;
     }
-}
 
-.login__server-overlay {
-    position: fixed;
-    top: 0;
-    background-color: $overlay;
-    width: 100vw;
-    height: 100vh;
-    z-index: 80;
+    .gallery__popup-preview {
+        position: relative;
+        z-index: 90;
+        background-color: white;
+    }
 }

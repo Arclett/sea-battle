@@ -28,6 +28,12 @@ export class SocketHandler {
 
     start() {
         this.authToken = this.getLocalStorage("authToken");
+        const userData = this.getLocalStorage("userData");
+        if (userData) {
+            console.log(userData);
+            this.userData = JSON.parse(userData);
+        }
+
         if (this.authToken) {
             this.authorization(this.authToken);
             return this.socket;
@@ -53,12 +59,14 @@ export class SocketHandler {
         this.socket.on("auth token", (token: string, user: GetUserData) => {
             this.hideOverlay();
             this.authToken = token;
-            this.saveToLocalStorage();
-            console.log("connected");
-            console.log(`Hello ${user.userName}`);
             this.userData = user;
+            this.saveToLocalStorage();
+            console.log(this.userData);
             const text = document.querySelector(".round-button__text");
             if (text instanceof HTMLElement) text.textContent = user.userName;
+            const container = document.querySelector(".login-popup");
+            if (!(container instanceof HTMLElement)) return;
+            container.replaceChildren();
         });
 
         this.socket.on("connect_error", (err: Error) => {
@@ -88,6 +96,7 @@ export class SocketHandler {
 
     saveToLocalStorage() {
         if (this.authToken) localStorage.setItem("authToken", this.authToken);
+        if (this.userData) localStorage.setItem("userData", JSON.stringify(this.userData));
     }
 
     randomOpponent() {

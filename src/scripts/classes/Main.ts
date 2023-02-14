@@ -1,3 +1,4 @@
+import { Account } from "./account/Account";
 import { LoginWindow } from "./loginWindow/LoginWindow";
 import { MultiPlayer } from "./multiPlayer/MultiPlayer";
 import { PlayField } from "./PlayField/PlayField";
@@ -13,6 +14,8 @@ export class Main {
 
     playField: PlayField;
 
+    account: Account;
+
     container: HTMLElement;
 
     start() {
@@ -26,27 +29,26 @@ export class Main {
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
+        this.account = new Account(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
-        window.addEventListener(
-            "hashchange",
-            () => {
-                //если хеш изменился то вызываем роутинг
-                this.appRouting(location.hash);
-            },
-            false
-        );
+        window.addEventListener("hashchange", this.hashChange.bind(this));
     }
 
     clickHandler(e: Event) {
         //изменяем хеш при клике
         e.preventDefault();
         if (!(e.target instanceof HTMLElement)) return;
+        console.log(e.target);
 
         //Login Window events
 
         if (e.target.classList.contains("round-button__link") || e.target.classList.contains("round-button__text")) {
-            this.loginWindow.start();
+            if (SocketHandler.instance.userData) {
+                window.location.href = "#account";
+            } else {
+                this.loginWindow.start();
+            }
         }
         if (e.target.classList.contains("login__overlay")) this.loginWindow.closeWindow();
         if (e.target.classList.contains("login__enter-button")) this.authorization(e.target);
@@ -60,6 +62,24 @@ export class Main {
         if (e.target.classList.contains("loading-window__button")) SocketHandler.instance.cancelMathcMaking();
         if (e.target.classList.contains("create-link__create")) this.multiPlayer.createLink();
         if (e.target.classList.contains("create-link__copy")) this.multiPlayer.copyLink();
+
+        //account events
+
+        if (e.target.classList.contains("gallery__skin-icon") || e.target.classList.contains("gallery__field-icon"))
+            this.account.openPreview(e.target);
+        if (
+            e.target.classList.contains("skins-preview__close-button") ||
+            e.target.classList.contains("preview-overlay")
+        )
+            this.account.closePreview();
+    }
+
+    hashChange() {
+        if (SocketHandler.instance.socket) {
+            this.appRouting(location.hash);
+        } else {
+            this.appRouting(" ");
+        }
     }
 
     appRouting(hash: string) {
@@ -73,6 +93,10 @@ export class Main {
 
             case "#play-field":
                 this.playField.start();
+                break;
+
+            case "#account":
+                this.account.start();
                 break;
 
             default:

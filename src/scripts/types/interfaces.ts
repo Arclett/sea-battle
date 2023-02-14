@@ -33,12 +33,20 @@ export interface CreateUserData {
 export interface GetUserData {
     userName: string;
     userGold: number;
-    currentFrame: string;
+    userXp: number;
+    obtShipSkins: string;
+    obtFieldSkin: string;
     currentShipSkin: string;
     currentFieldSkin: string;
+    winsPvP: number;
+    winsPvE: number;
 }
 export interface MultuPlayerElems {
     chatInput: HTMLInputElement;
     chatBody: HTMLElement;
     linkBody: HTMLElement;
+}
+export interface AccountElems {
+    popup: HTMLElement;
+    overlay: HTMLElement;
 }
