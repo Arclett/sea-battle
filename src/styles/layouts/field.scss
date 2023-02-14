@@ -1,0 +1,102 @@
+.field__container {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+#list__shipsHorizontal {
+  display: grid;
+  gap: 10px;
+  width: 220px;
+  border: 2px solid rgb(55, 0, 255);
+  box-sizing: content-box;
+}
+
+#list__shipsVertical {
+  display: grid;
+  width: 220px;
+  border: 2px solid rgb(55, 0, 255);
+  box-sizing: content-box;
+}
+
+#field {
+  border: 2px solid rgb(55, 0, 255);
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.field__small {
+  border: 1px solid rgb(0, 251, 255);
+  width: 33px;
+  height: 33px;
+}
+
+.ships__container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  background: rgb(123, 206, 159);
+}
+
+.ship:hover {
+  cursor: pointer;
+}
+
+// .battleship {
+//   width: 132px;
+// }
+
+// .cruiser {
+//   width: 99px;
+// }
+
+// .destroyer {
+//   width: 66px;
+// }
+
+// .boat {
+//   width: 33px;
+// }
+
+.controlMenu__container {
+  margin-top: 20px;
+}
+
+.trash:hover {
+  cursor: pointer;
+}
+
+.trash:active {
+  cursor: pointer;
+}
+
+.circleArrow:hover {
+  cursor: pointer;
+}
+
+.circleArrow:active {
+  transform: scale(0.9);
+}
+
+.horizontal {
+  height: 33px;
+}
+
+.vertical {
+  height: auto;
+}
+
+#boat__container {
+  height: 33px;
+}
+
+.random:hover {
+  cursor: pointer;
+}
+
+#startGame {
+  margin-top: 20px;
+  width: 1000px;
+  height: 50px;
+}

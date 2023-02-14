@@ -1,4 +1,4 @@
-import { ElementInterface, InputElement } from "../../types/interfaces";
+import { ElementInterface, ImageElement, InputElement } from "../../types/interfaces";
 
 export class Element {
     static createElement({ tag, id, classNote, content, disable = false }: ElementInterface) {
@@ -36,6 +36,27 @@ export class Element {
         }
         if (name) {
             el.name = name;
+        }
+        return el;
+    }
+
+    static createImage({ src, id, classNote, alt, width, height }: ImageElement) {
+        const el = new Image();
+        el.src = src;
+        if (id) {
+            el.id = id;
+        }
+        if (classNote) {
+            el.className = classNote;
+        }
+        if (alt) {
+            el.alt = alt;
+        }
+        if (width) {
+            el.width = width;
+        }
+        if (height) {
+            el.height = height;
         }
         return el;
     }
