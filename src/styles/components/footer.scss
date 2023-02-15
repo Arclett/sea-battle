@@ -1,25 +1,25 @@
 .footer {
-  height: 60px;
-  background: midnightblue;
+    height: 60px;
+    background: $mainColor;
 }
 
 .footer__wrapper {
-  margin: auto;
-  padding-top: 10px;
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  column-gap: 50px;
+    margin: auto;
+    padding-top: 10px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 50px;
 }
 
 .footer__round-button {
-  position: absolute;
-  left: 0;
-  top: -50px;
+    position: absolute;
+    left: 0;
+    top: -50px;
 }
 
 .round-button__icon {
-  width: 80px;
-  margin-left: 3px;
+    width: 80px;
+    margin-left: 3px;
 }

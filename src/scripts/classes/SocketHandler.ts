@@ -125,6 +125,7 @@ export class SocketHandler {
     }
 
     guestJoin(id: string) {
+        console.log("guest join");
         this.showOverlay(WaitingWindowType.opponent);
         this.socket.emit("join by link", id);
     }

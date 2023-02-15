@@ -26,14 +26,14 @@ export class Main {
         const container = document.querySelector(".main__wrapper");
         if (!(container instanceof HTMLElement)) return;
         this.container = container;
-        RenderMainPage.renderMainPage(this.container);
+        new GUIStartPage().renderStartPag();
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
         this.account = new Account(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
-        new GUIStartPage().renderStartPag();
+
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener("hashchange", this.hashChange.bind(this));
     }
@@ -44,6 +44,8 @@ export class Main {
         if (!(e.target instanceof HTMLElement)) return;
         console.log(e.target);
 
+        if (e.target.classList.contains("main-title")) this.toMainPage();
+
         //Login Window events
 
         if (e.target.classList.contains("round-button__link") || e.target.classList.contains("round-button__text")) {
@@ -53,10 +55,9 @@ export class Main {
                 this.loginWindow.start();
             }
         }
-        if (e.target.classList.contains("login__overlay")) location.hash = '';
+        if (e.target.classList.contains("login__overlay")) location.hash = "";
         if (e.target.classList.contains("login__enter-button")) this.authorization(e.target);
         if (e.target.classList.contains("login__regist-button")) this.loginWindow.switchLoginWindowMode(e.target);
-
 
         //Multiplayer Page events
 
@@ -98,7 +99,7 @@ export class Main {
             case "#play-field":
                 this.playField.start();
                 break;
-            case '#shipsPlacement':
+            case "#shipsPlacement":
                 new GUIShipsPlacement().renderShipsPlacement();
                 break;
 
@@ -107,7 +108,7 @@ export class Main {
                 break;
 
             default:
-                RenderMainPage.renderMainPage(this.container);
+                new GUIStartPage().renderStartPag();
                 break;
         }
     }
@@ -133,14 +134,23 @@ export class Main {
         window.location.href = "#multiplayer";
     }
 
+    toMainPage() {
+        window.location.href = "#main";
+    }
+
     multiPlayerStart(query: string | undefined) {
         if (!query) {
             this.multiPlayer.start();
             SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
         } else {
-            console.log("query!");
-            SocketHandler.instance.authorization("guest");
-            SocketHandler.instance.guestJoin(query.split("=")[1]);
+            console.log(SocketHandler.instance.authToken);
+            if (!SocketHandler.instance.authToken) {
+                SocketHandler.instance.authorization("guest");
+                SocketHandler.instance.guestJoin(query.split("=")[1]);
+            } else {
+                SocketHandler.instance.authorization(SocketHandler.instance.authToken);
+                SocketHandler.instance.guestJoin(query.split("=")[1]);
+            }
         }
     }
 }

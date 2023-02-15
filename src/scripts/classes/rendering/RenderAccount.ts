@@ -76,16 +76,9 @@ export class RenderAccount {
 
         const skins = ["default"]; //add skins here
 
-        // skins.forEach((e) => {
-        //     // const imgWrapper = Element.createElement
-        //     const img = new Image();
-        //     img.src = `../../assets/images/ships/${e}/battleshipVertical.png`;
-        //     img.className = `gallery__skin-icon ${e}`;
-        //     galBody.append(img);
-        // });
         RenderAccount.renderGalParts(skins, galBody, "skins");
 
-        const fields = ["school"];
+        const fields = ["coral", "default", "fish", "gold", "grass", "ice", "lava", "sand"];
 
         RenderAccount.renderGalParts(fields, galBody, "fields");
 
@@ -97,7 +90,7 @@ export class RenderAccount {
             const imgWrapper = Element.createElement({ tag: "div", classNote: "gallery__icon-wrapper" });
             const img = new Image();
             if (type === "fields") {
-                img.src = `../../assets/images/fields/field-icon-${e}.jpg`;
+                img.src = `../../assets/images/fields/${e}-field.jpg`;
                 img.className = `gallery__field-icon ${e}`;
             } else {
                 img.src = `../../assets/images/ships/${e}/battleshipVertical.png`;
@@ -124,7 +117,7 @@ export class RenderAccount {
             });
         } else {
             const img = new Image();
-            img.src = `../../assets/images/fields/field-${skin}.jpg`;
+            img.src = `../../assets/images/fields/${skin}-field.jpg`;
             skinsGal.append(img);
         }
 

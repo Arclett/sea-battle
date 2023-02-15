@@ -8,9 +8,16 @@
 .gallery-wrapper__gallery {
     display: flex;
     flex-wrap: wrap;
-    .gallery__skin-icon,
-    .gallery__field-icon {
-        height: 100px;
-        background-color: white;
+    .gallery__icon-wrapper {
+        height: 200px;
+        width: 200px;
+        object-fit: contain;
+        @include centered;
+        .gallery__skin-icon,
+        .gallery__field-icon {
+            height: 150px;
+            max-width: 150px;
+            background-color: white;
+        }
     }
 }
