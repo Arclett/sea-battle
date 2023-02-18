@@ -26,6 +26,7 @@ export interface ImageElement {
 }
 
 export interface LoginWindowElements {
+    error: HTMLElement;
     accInput: HTMLInputElement;
     accPass: HTMLInputElement;
     emailInput: HTMLInputElement;

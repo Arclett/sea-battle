@@ -71,7 +71,10 @@ export class SocketHandler {
 
         this.socket.on("connect_error", (err: Error) => {
             this.hideOverlay();
-            console.log(err.message);
+            const error = document.querySelector(".login__error");
+            if (!(error instanceof HTMLElement)) return;
+            error.classList.remove("hidden");
+            error.textContent = err.message;
         });
 
         this.socket.on("chat message", (text: string) => {
@@ -144,7 +147,7 @@ export class SocketHandler {
         localStorage.clear();
         this.userData = undefined;
         this.authToken = undefined;
-        window.location.pathname = "#main";
+        window.location.hash = "";
         location.reload();
     }
 }

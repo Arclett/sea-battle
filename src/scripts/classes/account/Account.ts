@@ -1,3 +1,4 @@
+import { Filters } from "../../types/enums";
 import { AccountElems } from "../../types/interfaces";
 import { RenderAccount } from "../rendering/RenderAccount";
 import { SocketHandler } from "../SocketHandler";
@@ -63,5 +64,14 @@ export class Account {
         }
         SocketHandler.instance.updateUser(SocketHandler.instance.userData);
         this.elems = RenderAccount.renderAccount(this.container, SocketHandler.instance.userData);
+    }
+
+    setFilter(elem: HTMLElement) {
+        if (elem.classList.contains("current-filter")) return;
+        const filter = elem.dataset.filter;
+        if (!filter) return;
+        const x = filter as Filters;
+        if (!SocketHandler.instance.userData) return;
+        this.elems = RenderAccount.renderAccount(this.container, SocketHandler.instance.userData, x);
     }
 }

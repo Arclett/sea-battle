@@ -14,14 +14,14 @@ export enum EnterButtonText {
 }
 
 export enum shipsImages {
-    battleshipImageHorizontal = "../../../assets/images/ships/@TYPE@/battleshipHorizontal.jpg",
-    cruiserImageHorizontal = "../../../assets/images/ships/@TYPE@/cruiserHorizontal.jpg",
-    destroyerImageHorizontal = "../../../assets/images/ships/@TYPE@/destroyerHorizontal.jpg",
-    boatImageHorizontal = "../../../assets/images/ships/@TYPE@/boatHorizontal.jpg",
-    battleshipImageVertical = "../../../assets/images/ships/@TYPE@/battleshipVertical.jpg",
-    cruiserImageVertical = "../../../assets/images/ships/@TYPE@/cruiserVertical.jpg",
-    destroyerImageVertical = "../../../assets/images/ships/@TYPE@/destroyerVertical.jpg",
-    boatImageVertical = "../../../assets/images/ships/@TYPE@/boatVertical.jpg",
+    battleshipImageHorizontal = "../../../assets/images/ships/@TYPE@/battleshipHorizontal.png",
+    cruiserImageHorizontal = "../../../assets/images/ships/@TYPE@/cruiserHorizontal.png",
+    destroyerImageHorizontal = "../../../assets/images/ships/@TYPE@/destroyerHorizontal.png",
+    boatImageHorizontal = "../../../assets/images/ships/@TYPE@/boatHorizontal.png",
+    battleshipImageVertical = "../../../assets/images/ships/@TYPE@/battleshipVertical.png",
+    cruiserImageVertical = "../../../assets/images/ships/@TYPE@/cruiserVertical.png",
+    destroyerImageVertical = "../../../assets/images/ships/@TYPE@/destroyerVertical.png",
+    boatImageVertical = "../../../assets/images/ships/@TYPE@/boatVertical.png",
 }
 
 export enum imagesPlacementMenu {
@@ -57,4 +57,12 @@ export enum WaitingWindowType {
 export enum WaitingWindowText {
     connect = "Connecting to server. Please wait",
     opponent = "Waiting for your opponent",
+}
+
+export enum Filters {
+    obtained = "obtained",
+    locked = "locked",
+    ships = "ships",
+    fields = "fields",
+    all = "all",
 }

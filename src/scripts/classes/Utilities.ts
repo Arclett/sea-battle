@@ -1,4 +1,4 @@
-import { shipsImages } from "../types/enums";
+import { Filters, shipsImages } from "../types/enums";
 import { FieldSkins, ShipSkins } from "../types/interfaces";
 import { SocketHandler } from "./SocketHandler";
 
@@ -21,6 +21,9 @@ export class Utilities {
         lava: 5000,
         sand: 500,
     };
+
+    static greet: string =
+        "You can immediately start playing against the computer. But in order to get access to the multiplayer game and your personal account, you must log in. In your personal account, you can choose the appearance of the ships, the background of the playing field, as well as view personal statistics. Hope you enjoy our game.";
 
     static randomNum(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1) + min);

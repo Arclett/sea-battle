@@ -37,6 +37,13 @@ export class Main {
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener("hashchange", this.hashChange.bind(this));
         window.addEventListener("input", this.selectHandler.bind(this));
+        window.onbeforeunload = function (e) {
+            e.preventDefault();
+            console.log(location.hash);
+            if (location.hash === "#shipsPlacement") {
+                return "Are you shure you want to leave game?";
+            }
+        };
     }
 
     clickHandler(e: Event) {
@@ -84,6 +91,7 @@ export class Main {
             if (e.target.classList.contains("select")) this.account.select(e.target);
         }
         if (e.target.classList.contains("status__logout")) SocketHandler.instance.logOut();
+        if (e.target.classList.contains("filters")) this.account.setFilter(e.target);
     }
 
     selectHandler(e: Event) {

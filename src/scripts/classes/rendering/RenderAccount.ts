@@ -1,12 +1,13 @@
+import { Filters } from "../../types/enums";
 import { GetUserData } from "../../types/interfaces";
 import { Element } from "../element/element";
 import { Utilities } from "../Utilities";
 
 export class RenderAccount {
-    static renderAccount(container: HTMLElement, data: GetUserData) {
+    static renderAccount(container: HTMLElement, data: GetUserData, filter?: Filters) {
         container.replaceChildren();
 
-        const title = Element.createElement({ tag: "h1", content: "Account", classNote: "account__title" });
+        const title = Element.createElement({ tag: "h1", content: data.name, classNote: "account__title" });
 
         const accInfoWrapper = Element.createElement({ tag: "nav", classNote: "account__info" });
         RenderAccount.renderAccInfo(accInfoWrapper, data);
@@ -19,7 +20,7 @@ export class RenderAccount {
 
         const galleryWrapper = Element.createElement({ tag: "div", classNote: "account__gallery" });
 
-        RenderAccount.renderGallery(galleryWrapper, data);
+        RenderAccount.renderGallery(galleryWrapper, data, filter);
 
         const overlay = Element.createElement({ tag: "div", classNote: "preview-overlay hidden" });
         const popup = Element.createElement({ tag: "div", classNote: "preview-popup" });
@@ -30,11 +31,11 @@ export class RenderAccount {
     }
 
     static renderAccInfo(container: HTMLElement, data: GetUserData) {
-        const accName = Element.createElement({
-            tag: "div",
-            classNote: "account__account-name",
-            content: data.name,
-        });
+        // const accName = Element.createElement({
+        //     tag: "div",
+        //     classNote: "account__account-name",
+        //     content: data.name,
+        // });
         const accGold = Element.createElement({
             tag: "div",
             classNote: "account__account-gold",
@@ -59,7 +60,7 @@ export class RenderAccount {
             content: `Wins in PvE: ${data.winsPvE}`,
         });
 
-        container.append(accName, accGold, accXp, accWinsPvE, accWinsPvP);
+        container.append(accGold, accXp, accWinsPvE, accWinsPvP);
     }
 
     static renderRankBar(container: HTMLElement, data: GetUserData) {
@@ -132,33 +133,84 @@ export class RenderAccount {
         container.append(currentShipSkin, selectShipSkin, currentFieldSkin, selectFieldSkin, logOut);
     }
 
-    static renderGallery(container: HTMLElement, data: GetUserData) {
-        const controlPanel = Element.createElement({ tag: "div", classNote: "gallery-wrapper__filters" });
+    static renderGallery(container: HTMLElement, data: GetUserData, filter?: Filters) {
+        const controlPanel = Element.createElement({ tag: "div", classNote: "gallery-wrapper__filters filters" });
 
-        const open = Element.createElement({ tag: "div", classNote: "filters__obtained-skins", content: "My Skins" });
+        const allSkins = Element.createElement({
+            tag: "div",
+            classNote: "filters__all-skins filters",
+            content: "All",
+        });
+        allSkins.dataset.filter = Filters.all;
+        if (!filter) {
+            allSkins.classList.add("current-filter");
+        }
+
+        const open = Element.createElement({
+            tag: "div",
+            classNote: "filters__obtained-skins filters",
+            content: "My Skins",
+        });
+        open.dataset.filter = Filters.obtained;
+        if (filter === Filters.obtained) {
+            open.classList.add("current-filter");
+        }
 
         const locked = Element.createElement({
             tag: "div",
-            classNote: "filters__locked-skins",
+            classNote: "filters__locked-skins filters",
             content: "Locked Skins",
         });
+        locked.dataset.filter = Filters.locked;
+        if (filter === Filters.locked) {
+            locked.classList.add("current-filter");
+        }
 
-        const shipSkins = Element.createElement({ tag: "div", classNote: "filters__ship-skins", content: " Ships" });
+        const shipSkins = Element.createElement({
+            tag: "div",
+            classNote: "filters__ship-skins filters",
+            content: " Ships",
+        });
+        shipSkins.dataset.filter = Filters.ships;
+        if (filter === Filters.ships) {
+            shipSkins.classList.add("current-filter");
+        }
 
-        const field = Element.createElement({ tag: "div", classNote: "filters__fields", content: "Fields" });
+        const field = Element.createElement({ tag: "div", classNote: "filters__fields filters", content: "Fields" });
+        field.dataset.filter = Filters.fields;
+        if (filter === Filters.fields) {
+            field.classList.add("current-filter");
+        }
 
-        controlPanel.append(open, locked, shipSkins, field);
+        controlPanel.append(allSkins, open, locked, shipSkins, field);
 
-        const galBody = Element.createElement({ tag: "div", classNote: "gallery-wrapper__gallery" });
+        const galBody = Element.createElement({ tag: "div", classNote: "gallery-wrapper__gallery filters" });
 
-        RenderAccount.renderGalParts(Object.keys(Utilities.shipSkins), galBody, "skins", data);
-
-        RenderAccount.renderGalParts(Object.keys(Utilities.fieldSkins), galBody, "fields", data);
+        if (filter === Filters.ships) {
+            RenderAccount.renderGalParts(Object.keys(Utilities.shipSkins), galBody, "skins", data, filter);
+        } else if (filter === Filters.fields) {
+            RenderAccount.renderGalParts(Object.keys(Utilities.fieldSkins), galBody, "fields", data, filter);
+        } else {
+            RenderAccount.renderGalParts(Object.keys(Utilities.shipSkins), galBody, "skins", data, filter);
+            RenderAccount.renderGalParts(Object.keys(Utilities.fieldSkins), galBody, "fields", data, filter);
+        }
 
         container.append(controlPanel, galBody);
     }
 
-    static renderGalParts(data: string[], container: HTMLElement, type: string, userData: GetUserData) {
+    static renderGalParts(
+        skinData: string[],
+        container: HTMLElement,
+        type: string,
+        userData: GetUserData,
+        filter?: Filters
+    ) {
+        let data;
+        if (filter) {
+            data = RenderAccount.filterData(filter, userData, skinData);
+        } else {
+            data = skinData;
+        }
         data.forEach((e) => {
             const imgWrapper = Element.createElement({ tag: "div", classNote: "gallery__icon-wrapper" });
             const img = new Image();
@@ -166,7 +218,7 @@ export class RenderAccount {
                 img.src = `../../assets/images/fields/${e}-field.jpg`;
                 img.className = `gallery__field-icon ${e}`;
             } else {
-                img.src = `../../assets/images/ships/${e}/battleshipVertical.jpg`;
+                img.src = `../../assets/images/ships/${e}/battleshipVertical.png`;
                 img.className = `gallery__skin-icon ${e}`;
             }
             if (userData.obtFieldSkins.includes(e) || userData.obtShipSkins.includes(e)) {
@@ -193,7 +245,7 @@ export class RenderAccount {
         if (type === "skin") {
             ["battleshipVertical", "cruiserVertical", "destroyerVertical", "boatVertical"].forEach((e) => {
                 const img = new Image();
-                img.src = `../../assets/images/ships/${skin}/${e}.jpg`;
+                img.src = `../../assets/images/ships/${skin}/${e}.png`;
                 skinsGal.append(img);
             });
         } else {
@@ -234,5 +286,22 @@ export class RenderAccount {
         window.append(title, skinsGal, button, priceElem, closeButton);
 
         container.append(window);
+    }
+
+    static filterData(filter: Filters, data: GetUserData, skinData: string[]) {
+        let res: string[];
+        switch (filter) {
+            case Filters.obtained:
+                res = skinData.filter((e) => data.obtFieldSkins.includes(e) || data.obtShipSkins.includes(e));
+                break;
+
+            case Filters.locked:
+                res = skinData.filter((e) => !(data.obtFieldSkins.includes(e) || data.obtShipSkins.includes(e)));
+                break;
+
+            default:
+                res = skinData;
+        }
+        return res;
     }
 }

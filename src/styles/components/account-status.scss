@@ -3,13 +3,28 @@
     align-items: center;
     justify-content: flex-start;
     font-size: 20px;
-    height: 30px;
-    margin: 20px 0;
+    height: 50px;
+    margin-top: 20px;
+    background-color: $background;
+    border: 2px solid $mainColor;
+    border-radius: 5px;
+
     div {
-        margin: 0 20px;
+        margin: 0 10px;
     }
     button {
         margin-left: auto;
         margin-right: 20px;
+        height: 40px;
+        font-size: 20px;
+        width: 100px;
+    }
+    select {
+        height: 40px;
+        border-radius: 5px;
+        border: 2px solid $mainColor;
+        width: 150px;
+        text-align: center;
+        font-size: 25px;
     }
 }

@@ -1,8 +1,18 @@
 import { Element } from "../element/element";
+import { Utilities } from "../Utilities";
 
 export class GUIStartPage {
     renderStartPag() {
         document.getElementsByClassName("wrapper main__wrapper")[0].innerHTML = "";
+
+        const infoWrapper = Element.createElement({ tag: "div", classNote: "game-info" });
+
+        const title = Element.createElement({ tag: "h2", content: "Welcome to Sea Battle!" });
+
+        const greet = Element.createElement({ tag: "div", content: Utilities.greet });
+
+        infoWrapper.append(title, greet);
+
         const gameMenu = Element.createElement({ tag: "div", classNote: "gameMenu__container" });
         document.getElementsByClassName("wrapper main__wrapper")[0].append(gameMenu);
         const singleGameContainer = Element.createElement({ tag: "div", classNote: "singleGame__container" });
@@ -32,8 +42,14 @@ export class GUIStartPage {
             localStorage.setItem("game", "singleGame");
             location.hash = "shipsPlacement";
         });
-        gameMenu.append(singleGameContainer, multiGameContainer);
+        gameMenu.append(infoWrapper, singleGameContainer, multiGameContainer);
         singleGameContainer.append(singleGameImage, singleGameStartButton);
         multiGameContainer.append(multiGameImage, multiGameStartButton);
+    }
+
+    renderGameInfo(container: HTMLElement) {
+        const title = Element.createElement({ tag: "h2", content: "Welcome to Sea Battle!" });
+
+        const greet = Element.createElement({ tag: "div", content: Utilities.greet });
     }
 }

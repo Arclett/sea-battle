@@ -1,13 +1,22 @@
 .gallery-wrapper__filters {
     display: flex;
     font-size: 20px;
-    margin: 20px;
+    height: 50px;
     justify-content: space-between;
+    border: 2px solid $mainColor;
+    border-radius: 5px;
+    align-items: center;
+    margin-bottom: 50px;
+    padding: 0 10px;
+    div {
+        padding: 3px 5px;
+    }
 }
 
 .gallery-wrapper__gallery {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 100px;
     .gallery__icon-wrapper {
         height: 200px;
         width: 200px;
@@ -28,4 +37,10 @@
 
 .obtained {
     border: 3px solid green;
+}
+
+.current-filter {
+    background-color: $mainColor;
+    color: white;
+    border-radius: 5px;
 }
