@@ -63,7 +63,7 @@ export class SocketHandler {
             this.saveToLocalStorage();
             console.log(this.userData);
             const text = document.querySelector(".round-button__text");
-            if (text instanceof HTMLElement) text.textContent = user.userName;
+            if (text instanceof HTMLElement) text.textContent = user.name;
             const container = document.querySelector(".login-popup");
             if (!(container instanceof HTMLElement)) return;
             container.replaceChildren();
@@ -82,6 +82,10 @@ export class SocketHandler {
             this.hideOverlay();
             this.opponent = opponent;
             window.location.href = "#play-field";
+        });
+
+        this.socket.on("update complete", () => {
+            this.hideOverlay();
         });
     }
 
@@ -102,7 +106,7 @@ export class SocketHandler {
     randomOpponent() {
         if (!this.userData) return;
         this.showOverlay(WaitingWindowType.opponent);
-        this.socket.emit("find random", this.userData.userName);
+        this.socket.emit("find random", this.userData.name);
     }
 
     cancelMathcMaking() {
@@ -128,5 +132,19 @@ export class SocketHandler {
         console.log("guest join");
         this.showOverlay(WaitingWindowType.opponent);
         this.socket.emit("join by link", id);
+    }
+
+    updateUser(data: GetUserData) {
+        this.saveToLocalStorage();
+        this.showOverlay(WaitingWindowType.connect);
+        this.socket.emit("update user", this.userData);
+    }
+
+    logOut() {
+        localStorage.clear();
+        this.userData = undefined;
+        this.authToken = undefined;
+        window.location.pathname = "#main";
+        location.reload();
     }
 }

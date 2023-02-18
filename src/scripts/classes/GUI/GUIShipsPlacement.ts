@@ -1,10 +1,11 @@
-import { defaultShipsImages, imagesPlacementMenu } from "../../types/enums";
+import { shipsImages, imagesPlacementMenu } from "../../types/enums";
 import { Element } from "../element/element";
 import { OrientationOfShips } from "../field/orientationOfShips";
 import { RandomShips } from "../field/randomShips";
 import { ShipsCoordinatesWithBackground } from "../field/shipsCoordinatesWithBackground";
 import { ShipsInField } from "../field/shipsInField";
 import { ShipsControl } from "../field/shipsControl";
+import { Utilities } from "../Utilities";
 
 export class GUIShipsPlacement {
     private orientationOfShip = new OrientationOfShips();
@@ -13,7 +14,7 @@ export class GUIShipsPlacement {
     private ShipCoordinatesWithBackground = new ShipsCoordinatesWithBackground();
     private ShipControl = new ShipsControl();
 
-    renderShipsPlacement() {
+    renderShipsPlacement(shipSkin: string) {
         document.getElementsByClassName("wrapper main__wrapper")[0].innerHTML = "";
         const controlMenu = Element.createElement({ tag: "div", classNote: "controlMenu__container" });
         const circleArrow = Element.createImage({
@@ -61,7 +62,7 @@ export class GUIShipsPlacement {
         }
         fieldContainer.append(listOfShips, fieldWrapper, controlMenu);
         const battleship = Element.createImage({
-            src: defaultShipsImages.battleshipImageHorizontal,
+            src: Utilities.makeImageLink(shipsImages.battleshipImageHorizontal),
             alt: "battleship",
             classNote: "battleship ship",
             width: 132,
@@ -81,7 +82,7 @@ export class GUIShipsPlacement {
         });
         for (let i = 0; i < 2; i++) {
             const cruiser = Element.createImage({
-                src: defaultShipsImages.cruiserImageHorizontal,
+                src: Utilities.makeImageLink(shipsImages.cruiserImageHorizontal),
                 alt: "cruiser",
                 classNote: "cruiser ship",
                 width: 99,
@@ -96,7 +97,7 @@ export class GUIShipsPlacement {
         });
         for (let i = 0; i < 3; i++) {
             const destroyer = Element.createImage({
-                src: defaultShipsImages.destroyerImageHorizontal,
+                src: Utilities.makeImageLink(shipsImages.destroyerImageHorizontal),
                 alt: "destroyer",
                 classNote: "destroyer ship",
                 width: 66,
@@ -111,7 +112,7 @@ export class GUIShipsPlacement {
         });
         for (let i = 0; i < 4; i++) {
             const boat = Element.createImage({
-                src: defaultShipsImages.boatImageHorizontal,
+                src: Utilities.makeImageLink(shipsImages.boatImageHorizontal),
                 alt: "boat",
                 classNote: "boat ship",
                 width: 33,

@@ -1,12 +1,23 @@
 .wrapper {
     .account__title {
-        height: 30px;
-        @include centered;
-        margin-top: 50px;
+        height: 40px;
+        font-size: 35px;
+        @include title;
+        width: 50%;
+        background-color: white;
+        margin: 50px auto;
+        text-align: center;
     }
     .account__info {
         display: flex;
         width: 100%;
         justify-content: space-between;
+        font-size: 20px;
+        height: 40px;
+        padding: 5px;
+        align-items: center;
+        border-radius: 5px;
+        background-color: $subColor;
+        color: white;
     }
 }

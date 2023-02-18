@@ -1,0 +1,17 @@
+.account-rank {
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    .rank__exp-bar {
+        width: 70%;
+        background-color: $mainColor;
+        border: 2px solid $mainColor;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        div {
+            background-color: white;
+            height: 20px;
+        }
+    }
+}

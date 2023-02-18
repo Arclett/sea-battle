@@ -13,32 +13,32 @@ export enum EnterButtonText {
     logMode = "Enter",
 }
 
-export enum defaultShipsImages {
-    battleshipImageHorizontal = '../../../assets/images/ships/default/battleshipHorizontal.png',
-    cruiserImageHorizontal = '../../../assets/images/ships/default/cruiserHorizontal.png',
-    destroyerImageHorizontal = '../../../assets/images/ships/default/destroyerHorizontal.png',
-    boatImageHorizontal = '../../../assets/images/ships/default/boatHorizontal.png',
-    battleshipImageVertical = '../../../assets/images/ships/default/battleshipVertical.png',
-    cruiserImageVertical = '../../../assets/images/ships/default/cruiserVertical.png',
-    destroyerImageVertical = '../../../assets/images/ships/default/destroyerVertical.png',
-    boatImageVertical = '../../../assets/images/ships/default/boatVertical.png',
+export enum shipsImages {
+    battleshipImageHorizontal = "../../../assets/images/ships/@TYPE@/battleshipHorizontal.jpg",
+    cruiserImageHorizontal = "../../../assets/images/ships/@TYPE@/cruiserHorizontal.jpg",
+    destroyerImageHorizontal = "../../../assets/images/ships/@TYPE@/destroyerHorizontal.jpg",
+    boatImageHorizontal = "../../../assets/images/ships/@TYPE@/boatHorizontal.jpg",
+    battleshipImageVertical = "../../../assets/images/ships/@TYPE@/battleshipVertical.jpg",
+    cruiserImageVertical = "../../../assets/images/ships/@TYPE@/cruiserVertical.jpg",
+    destroyerImageVertical = "../../../assets/images/ships/@TYPE@/destroyerVertical.jpg",
+    boatImageVertical = "../../../assets/images/ships/@TYPE@/boatVertical.jpg",
 }
 
 export enum imagesPlacementMenu {
-    circleArrow = '../../../assets/images/circle-arrow.png',
-    clearField = '../../../assets/images/trash.png',
-    randomShipsToField = '../../../assets/images/random.png',
+    circleArrow = "../../../assets/images/circle-arrow.png",
+    clearField = "../../../assets/images/trash.png",
+    randomShipsToField = "../../../assets/images/random.png",
 }
 
 export enum orientation {
-    horizontal = 'horizontal',
-    vertical = 'vertical',
-    middle = 'middle',
+    horizontal = "horizontal",
+    vertical = "vertical",
+    middle = "middle",
 }
 
 export enum color {
-    backgroundAroundShip = 'pink',
-    backgroundUnderShip = 'grey 0px 0px 4em 4em inset',
+    backgroundAroundShip = "pink",
+    backgroundUnderShip = "grey 0px 0px 4em 4em inset",
 }
 
 export enum shipsLength {

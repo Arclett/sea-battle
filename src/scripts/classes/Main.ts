@@ -36,6 +36,7 @@ export class Main {
 
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener("hashchange", this.hashChange.bind(this));
+        window.addEventListener("input", this.selectHandler.bind(this));
     }
 
     clickHandler(e: Event) {
@@ -75,8 +76,20 @@ export class Main {
         if (
             e.target.classList.contains("skins-preview__close-button") ||
             e.target.classList.contains("preview-overlay")
-        )
+        ) {
             this.account.closePreview();
+        }
+        if (e.target.classList.contains("skins-preview__set-button")) {
+            if (e.target.classList.contains("buy")) this.account.buy(e.target);
+            if (e.target.classList.contains("select")) this.account.select(e.target);
+        }
+        if (e.target.classList.contains("status__logout")) SocketHandler.instance.logOut();
+    }
+
+    selectHandler(e: Event) {
+        if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) return;
+        if (e.target.classList.contains("status__ship-select") || e.target.classList.contains("status__field-select"))
+            this.account.select(e.target);
     }
 
     hashChange() {
@@ -100,7 +113,7 @@ export class Main {
                 this.playField.start();
                 break;
             case "#shipsPlacement":
-                new GUIShipsPlacement().renderShipsPlacement();
+                this.toSetShipPage();
                 break;
 
             case "#account":
@@ -135,7 +148,14 @@ export class Main {
     }
 
     toMainPage() {
-        window.location.href = "#main";
+        window.location.href = "";
+    }
+
+    toSetShipPage() {
+        const shipSkin = SocketHandler.instance.userData?.currentShipSkin
+            ? SocketHandler.instance.userData?.currentShipSkin
+            : "school";
+        new GUIShipsPlacement().renderShipsPlacement("school");
     }
 
     multiPlayerStart(query: string | undefined) {
