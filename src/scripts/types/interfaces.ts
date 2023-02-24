@@ -63,3 +63,8 @@ export interface MultuPlayerElems {
     chatBody: HTMLElement;
     linkBody: HTMLElement;
 }
+
+export interface ShipsCoordinates {
+    coordinatesOfShips: number[][];
+    orientationBoat: string;
+}

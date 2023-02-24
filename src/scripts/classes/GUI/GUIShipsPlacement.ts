@@ -5,6 +5,7 @@ import { RandomShips } from "../field/randomShips";
 import { ShipsCoordinatesWithBackground } from "../field/shipsCoordinatesWithBackground";
 import { ShipsInField } from "../field/shipsInField";
 import { ShipsControl } from "../field/shipsControl";
+import { GUISingleGamePage } from "./GUISingleGamePage";
 
 export class GUIShipsPlacement{
   private orientationOfShip = new OrientationOfShips();
@@ -19,11 +20,12 @@ export class GUIShipsPlacement{
     const circleArrow = Element.createImage({ src: imagesPlacementMenu.circleArrow, alt: 'left-right', classNote: 'circleArrow', width: 150});
     const backShips = Element.createImage({ src: imagesPlacementMenu.clearField, alt: 'trash', classNote: 'trash', width: 150 });
     const randomShips = Element.createImage({ src: imagesPlacementMenu.randomShipsToField, alt: 'random', classNote: 'random', width: 150 });
-    const fieldContainer = Element.createElement({ tag: 'div', classNote: 'field__container' });
+    const fieldContainer = Element.createElement({ tag: 'div', classNote: 'shipsPlacement__container' });
     const startButton = Element.createElement({ tag: 'button', id: 'startGame', content: 'Start Game' });
     startButton.addEventListener('click', () => {
-      if (this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinates.length === 10) {
-        console.log(this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinates, this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinatesWithBackground);
+      if (this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinates.coordinatesOfShips.length === 10) {
+        //console.log(this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinates, this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinatesWithBackground);
+        location.hash = 'singleGame';
       }
     });
     circleArrow.addEventListener('click', () => {
@@ -32,7 +34,7 @@ export class GUIShipsPlacement{
     controlMenu.append(circleArrow, backShips, randomShips);
     document.getElementsByClassName('wrapper main__wrapper')[0].append(fieldContainer, startButton);
     const listOfShips = Element.createElement({ tag: 'div', id: 'list__shipsHorizontal' });
-    const field = Element.createElement({ tag: 'div', id: 'field' });
+    const field = Element.createElement({ tag: 'div', id: 'field', classNote: 'field__container' });
     for (let i = 0; i < 100; i++) {
       const smallField = Element.createElement({ tag: 'div', classNote: 'field__small droppable' });
       field.append(smallField);

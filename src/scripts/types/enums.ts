@@ -58,3 +58,14 @@ export enum WaitingWindowText {
     connect = "Connecting to server. Please wait",
     opponent = "Waiting for your opponent",
 }
+
+export enum BackgroundAttack {
+    wound = 'url("../../../assets/images/wound.png") 0% 0% / contain no-repeat',
+    miss = 'url("../../../assets/images/miss.png") 0% 0% / contain no-repeat',
+}
+
+export enum StatusShip {
+    miss = 'miss',
+    wound = 'wound',
+    dead = 'dead',
+}

@@ -5,6 +5,7 @@ import { RenderMainPage } from "./rendering/RenderMainPage";
 import { SocketHandler } from "./SocketHandler";
 import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
 import { GUIStartPage } from "./GUI/GUIStartPage";
+import { GUISingleGamePage } from "./GUI/GUISingleGamePage";
 
 export class Main {
     loginWindow: LoginWindow;
@@ -23,13 +24,12 @@ export class Main {
         const container = document.querySelector(".main__wrapper");
         if (!(container instanceof HTMLElement)) return;
         this.container = container;
-        RenderMainPage.renderMainPage(this.container);
+        //RenderMainPage.renderMainPage(this.container);
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
-        new GUIStartPage().renderStartPag();
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener(
             "hashchange",
@@ -81,9 +81,12 @@ export class Main {
             case '#shipsPlacement':
                 new GUIShipsPlacement().renderShipsPlacement();
                 break;
+            case '#singleGame':
+                new GUISingleGamePage().renderSingleGamePage();
+                break;
 
             default:
-                RenderMainPage.renderMainPage(this.container);
+                new GUIStartPage().renderStartPag();
                 break;
         }
     }
