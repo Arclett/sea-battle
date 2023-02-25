@@ -1,4 +1,4 @@
-import { orientation } from "../../types/enums";
+import { defaultShipsImages, orientation } from "../../types/enums";
 import { OrientationOfShips } from "./orientationOfShips";
 
 export class ShipsCoordinates {
@@ -6,9 +6,11 @@ export class ShipsCoordinates {
   private vertical: string = orientation.vertical;
   private middle: string = orientation.middle;
   private orientationOfShip = new OrientationOfShips();
+  private boatImageHorizontal = defaultShipsImages.boatImageHorizontal;
 
   getShipsCoordinates() {
     let coordinatesOfShips: number[][] = [];
+    let orientationBoat = this.vertical;
         let countSihps: number = -1;
         document.getElementById('field')?.childNodes.forEach((element, index) => {
           if ((element as HTMLElement).classList.contains('ship__active')) {
@@ -17,11 +19,17 @@ export class ShipsCoordinates {
               countSihps += 1;
               let el = (element.firstChild as HTMLImageElement);
               const OrientationShip = this.orientationOfShip.getOrientationShip(el);
-              //const OrientationShip = this.getOrientationShip(el);
               const orient = OrientationShip.orient;
               const lengthShip = OrientationShip.lengthShip;
+              let src = el.src.split('/');
+              let srcboat = this.boatImageHorizontal.split('/');
               if (orient === this.middle) {
                 coordinatesOfShips[countSihps].push(index);
+                if (src[src.length - 1] === srcboat[srcboat.length - 1]) {
+                  orientationBoat = this.horizontal;
+                } else {
+                  orientationBoat = this.vertical;
+                }
               }
               if (orient === this.horizontal) {
                 for (let i = 0; i < lengthShip; i++) {
@@ -36,7 +44,7 @@ export class ShipsCoordinates {
             }
           }
         });
-      return coordinatesOfShips;
+      return {coordinatesOfShips, orientationBoat};
   }
 
 }

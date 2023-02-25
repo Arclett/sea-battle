@@ -20,7 +20,7 @@ export class ShipsControl {
     let orientation: string;
     let currentDroppable: HTMLElement | null = null;
     img.onmousedown = (event) => {
-      img.width >= 33 ? orientation = this.horizontal : orientation = this.vertical;
+      img.width > 33 ? orientation = this.horizontal : orientation = this.vertical;
       shiftX = event.clientX - img.getBoundingClientRect().left;
       shiftY = event.clientY - img.getBoundingClientRect().top;
       img.style.position = 'absolute';

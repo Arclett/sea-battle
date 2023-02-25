@@ -52,7 +52,10 @@ export class ShipsInField {
       let el = element as HTMLElement;
       for (let i = 0; i < shipLength - 1; i++) {
         for (let i = 0; i < 10; i++) {
-          el = el.nextElementSibling as HTMLElement;
+          if (el.nextElementSibling as HTMLElement !== null) {
+            el = el.nextElementSibling as HTMLElement;
+          }
+          
         }
         el.classList.remove('ship__active');
       }

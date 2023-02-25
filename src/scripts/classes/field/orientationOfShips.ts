@@ -182,8 +182,12 @@ export class OrientationOfShips {
   changeBoat(orientation: string, ship: HTMLImageElement) {
     if (orientation === this.horizontal) {
       ship.src = defaultShipsImages.boatImageHorizontal;
+      ship.width = shipsLength.boat;
+      ship.height = shipsLength.boat;
     } else {
       ship.src = defaultShipsImages.boatImageVertical;
+      ship.width = shipsLength.boat;
+      ship.height = shipsLength.boat;
     }
   }
 }

@@ -25,7 +25,10 @@ export class RandomShips {
 
   getRandomPositionBattleship() {
     const orientation = this.getRandomOrientation();
-    const ship = document.getElementsByClassName('battleship')[0] as HTMLImageElement;
+    let ship = document.getElementsByClassName('battleship')[0] as HTMLImageElement;
+    if (ship === undefined) {
+      ship = new Image();
+    }
     let randomRowsHorizontal = Math.floor(Math.random() * 10);
     let randomRowsVertical = Math.floor(Math.random() * 7);
     let battleshipHorizontal = Math.floor(Math.random() * 7) + randomRowsHorizontal * 10;
@@ -49,7 +52,10 @@ export class RandomShips {
   getRandomPositionCruiser() {
     for (let i = 0; i < 2; i++) {
       const orientation = this.getRandomOrientation();
-      const ship = document.getElementsByClassName('cruiser')[0] as HTMLImageElement;
+      let ship = document.getElementsByClassName('cruiser')[0] as HTMLImageElement;
+      if (ship === undefined) {
+        ship = new Image();
+      }
       let randomRowsHorizontal = Math.floor(Math.random() * 10);
       let randomRowsVertical = Math.floor(Math.random() * 8);
       let battleshipHorizontal = Math.floor(Math.random() * 8) + randomRowsHorizontal * 10;
@@ -83,7 +89,10 @@ export class RandomShips {
   getRandomPositionDestroyer() {
     for (let i = 0; i < 3; i++) {
       const orientation = this.getRandomOrientation();
-      const ship = document.getElementsByClassName('destroyer')[0] as HTMLImageElement;
+      let ship = document.getElementsByClassName('destroyer')[0] as HTMLImageElement;
+      if (ship === undefined) {
+        ship = new Image();
+      }
       let randomRowsHorizontal = Math.floor(Math.random() * 10);
       let randomRowsVertical = Math.floor(Math.random() * 9);
       let battleshipHorizontal = Math.floor(Math.random() * 9) + randomRowsHorizontal * 10;
@@ -117,7 +126,10 @@ export class RandomShips {
   getRandomPositionBoat() {
     const orientation = this.getRandomOrientation();
     for (let i = 0; i < 4; i++) {
-      const ship = document.getElementsByClassName('boat')[0] as HTMLImageElement;
+      let ship = document.getElementsByClassName('boat')[0] as HTMLImageElement;
+      if (ship === undefined) {
+        ship = new Image();
+      }
       let randomRowsHorizontal = Math.floor(Math.random() * 10);
       let randomRowsVertical = Math.floor(Math.random() * 10);
       let battleshipHorizontal = Math.floor(Math.random() * 10) + randomRowsHorizontal * 10;

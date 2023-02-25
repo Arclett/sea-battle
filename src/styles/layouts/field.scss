@@ -1,4 +1,4 @@
-.field__container {
+.shipsPlacement__container {
   display: flex;
   gap: 20px;
   margin-top: 20px;
@@ -19,7 +19,7 @@
   box-sizing: content-box;
 }
 
-#field {
+.field__container {
   border: 2px solid rgb(55, 0, 255);
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -99,4 +99,14 @@
   margin-top: 20px;
   width: 1000px;
   height: 50px;
+}
+
+.game__container {
+  padding-top: 100px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.enemyField:hover {
+  cursor: pointer;
 }
