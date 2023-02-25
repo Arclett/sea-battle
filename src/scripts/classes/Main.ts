@@ -1,3 +1,4 @@
+import { Account } from "./account/Account";
 import { LoginWindow } from "./loginWindow/LoginWindow";
 import { MultiPlayer } from "./multiPlayer/MultiPlayer";
 import { PlayField } from "./PlayField/PlayField";
@@ -16,6 +17,8 @@ export class Main {
 
     playField: PlayField;
 
+    account: Account;
+
     container: HTMLElement;
 
     start() {
@@ -24,37 +27,46 @@ export class Main {
         const container = document.querySelector(".main__wrapper");
         if (!(container instanceof HTMLElement)) return;
         this.container = container;
+        new GUIStartPage().renderStartPag();
         //RenderMainPage.renderMainPage(this.container);
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
+        this.account = new Account(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
-        window.addEventListener(
-            "hashchange",
-            () => {
-                //если хеш изменился то вызываем роутинг
-                this.appRouting(location.hash);
-            },
-            false
-        );
+        window.addEventListener("hashchange", this.hashChange.bind(this));
+        window.addEventListener("input", this.selectHandler.bind(this));
+        window.onbeforeunload = function (e) {
+            e.preventDefault();
+            console.log(location.hash);
+            if (location.hash === "#shipsPlacement") {
+                return "Are you shure you want to leave game?";
+            }
+        };
     }
 
     clickHandler(e: Event) {
         //изменяем хеш при клике
         e.preventDefault();
         if (!(e.target instanceof HTMLElement)) return;
+        console.log(e.target);
+
+        if (e.target.classList.contains("main-title")) this.toMainPage();
 
         //Login Window events
 
         if (e.target.classList.contains("round-button__link") || e.target.classList.contains("round-button__text")) {
-            this.loginWindow.start();
+            if (SocketHandler.instance.userData) {
+                window.location.href = "#account";
+            } else {
+                this.loginWindow.start();
+            }
         }
-        if (e.target.classList.contains("login__overlay")) location.hash = '';
+        if (e.target.classList.contains("login__overlay")) location.hash = "";
         if (e.target.classList.contains("login__enter-button")) this.authorization(e.target);
         if (e.target.classList.contains("login__regist-button")) this.loginWindow.switchLoginWindowMode(e.target);
-
 
         //Multiplayer Page events
 
@@ -64,6 +76,37 @@ export class Main {
         if (e.target.classList.contains("loading-window__button")) SocketHandler.instance.cancelMathcMaking();
         if (e.target.classList.contains("create-link__create")) this.multiPlayer.createLink();
         if (e.target.classList.contains("create-link__copy")) this.multiPlayer.copyLink();
+
+        //account events
+
+        if (e.target.classList.contains("gallery__skin-icon") || e.target.classList.contains("gallery__field-icon"))
+            this.account.openPreview(e.target);
+        if (
+            e.target.classList.contains("skins-preview__close-button") ||
+            e.target.classList.contains("preview-overlay")
+        ) {
+            this.account.closePreview();
+        }
+        if (e.target.classList.contains("skins-preview__set-button")) {
+            if (e.target.classList.contains("buy")) this.account.buy(e.target);
+            if (e.target.classList.contains("select")) this.account.select(e.target);
+        }
+        if (e.target.classList.contains("status__logout")) SocketHandler.instance.logOut();
+        if (e.target.classList.contains("filters")) this.account.setFilter(e.target);
+    }
+
+    selectHandler(e: Event) {
+        if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) return;
+        if (e.target.classList.contains("status__ship-select") || e.target.classList.contains("status__field-select"))
+            this.account.select(e.target);
+    }
+
+    hashChange() {
+        if (SocketHandler.instance.socket) {
+            this.appRouting(location.hash);
+        } else {
+            this.appRouting(" ");
+        }
     }
 
     appRouting(hash: string) {
@@ -78,8 +121,12 @@ export class Main {
             case "#play-field":
                 this.playField.start();
                 break;
-            case '#shipsPlacement':
-                new GUIShipsPlacement().renderShipsPlacement();
+            case "#shipsPlacement":
+                this.toSetShipPage();
+                break;
+
+            case "#account":
+                this.account.start();
                 break;
             case '#singleGame':
                 new GUISingleGamePage().renderSingleGamePage();
@@ -112,14 +159,30 @@ export class Main {
         window.location.href = "#multiplayer";
     }
 
+    toMainPage() {
+        window.location.href = "";
+    }
+
+    toSetShipPage() {
+        const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
+            ? SocketHandler.instance.userData?.currentFieldSkin
+            : "default";
+        new GUIShipsPlacement().renderShipsPlacement(fieldSkin);
+    }
+
     multiPlayerStart(query: string | undefined) {
         if (!query) {
             this.multiPlayer.start();
             SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
         } else {
-            console.log("query!");
-            SocketHandler.instance.authorization("guest");
-            SocketHandler.instance.guestJoin(query.split("=")[1]);
+            console.log(SocketHandler.instance.authToken);
+            if (!SocketHandler.instance.authToken) {
+                SocketHandler.instance.authorization("guest");
+                SocketHandler.instance.guestJoin(query.split("=")[1]);
+            } else {
+                SocketHandler.instance.authorization(SocketHandler.instance.authToken);
+                SocketHandler.instance.guestJoin(query.split("=")[1]);
+            }
         }
     }
 }

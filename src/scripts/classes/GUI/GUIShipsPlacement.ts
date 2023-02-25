@@ -1,4 +1,4 @@
-import { defaultShipsImages, imagesPlacementMenu } from "../../types/enums";
+import { shipsImages, imagesPlacementMenu } from "../../types/enums";
 import { Element } from "../element/element";
 import { OrientationOfShips } from "../field/orientationOfShips";
 import { RandomShips } from "../field/randomShips";
@@ -63,12 +63,4 @@ export class GUIShipsPlacement{
       this.ShipControl.dragAndDropShip(boat);
       boatContainer.append(boat);
     }
-    listOfShips.append(cruiserContainer, destroyerContainer, boatContainer);
-    backShips.addEventListener('click', () => {
-      this.shipInField.returnAllShips();
-    });
-    randomShips.addEventListener('click', () => {
-      this.randomShip.setRandomBattleship();
-    });
-  }
 }

@@ -10,6 +10,8 @@ export class RenderLoginWindow {
 
         const loginTitle = Element.createElement({ tag: "h2", content: "Please Log In Your Accaunt" });
 
+        const loginError = Element.createElement({tag:"div", classNote:"login__error hidden"})
+
         const accInput = Element.createInput({
             type: "text",
             content: "name or e-mail",
@@ -42,10 +44,11 @@ export class RenderLoginWindow {
             content: "or create new account",
         });
 
-        loginWrapper.append(loginTitle, accInput, emailInput, accPass, accPassConfirm, enterButton, changeMode);
+        loginWrapper.append(loginTitle, loginError, accInput, emailInput, accPass, accPassConfirm, enterButton, changeMode);
         container.append(loginWrapper, overlay);
 
         return {
+            error: loginError,
             accInput: accInput,
             accPass: accPass,
             emailInput: emailInput,

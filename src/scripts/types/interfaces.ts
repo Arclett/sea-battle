@@ -26,6 +26,7 @@ export interface ImageElement {
 }
 
 export interface LoginWindowElements {
+    error: HTMLElement;
     accInput: HTMLInputElement;
     accPass: HTMLInputElement;
     emailInput: HTMLInputElement;
@@ -52,11 +53,15 @@ export interface SmallBackground {
 }
 
 export interface GetUserData {
-    userName: string;
-    userGold: number;
-    currentFrame: string;
+    name: string;
+    gold: number;
+    exp: number;
+    obtShipSkins: string;
+    obtFieldSkins: string;
     currentShipSkin: string;
     currentFieldSkin: string;
+    winsPvP: number;
+    winsPvE: number;
 }
 export interface MultuPlayerElems {
     chatInput: HTMLInputElement;
@@ -64,7 +69,42 @@ export interface MultuPlayerElems {
     linkBody: HTMLElement;
 }
 
+export interface AccountElems {
+    popup: HTMLElement;
+    overlay: HTMLElement;
+}
+
+export interface RankCalculation {
+    curRank: number;
+    rankStart: number;
+    rankNext: number;
+    percentage: number;
+}
+
+export interface ShipSkins {
+    history: number;
+    modern: number;
+    school: number;
+    shadow: number;
+    trade: number;
+    [key: string]: number;
+}
+
+export interface FieldSkins {
+    coral: number;
+    default: number;
+    fish: number;
+    gold: number;
+    grass: number;
+    ice: number;
+    lava: number;
+    sand: number;
+    [key: string]: number;
+}
+
+
 export interface ShipsCoordinates {
     coordinatesOfShips: number[][];
     orientationBoat: string;
 }
+

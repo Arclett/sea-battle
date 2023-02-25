@@ -12,7 +12,10 @@
 @import "components/round-button";
 @import "./components/login-popup.scss";
 @import "./components/loading-window.scss";
-
+@import "./components/account-info.scss";
+@import "./components/account-status.scss";
+@import "./components/exp-bar.scss";
+@import "./components/preview-popup.scss";
 @import "components/footer";
 
 // layouts //
@@ -20,6 +23,7 @@
 @import "layouts/field";
 @import "layouts/startPage";
 @import "./layouts/multiplayer.scss";
+@import "./layouts/account.scss";
 
 // fonts //
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap");

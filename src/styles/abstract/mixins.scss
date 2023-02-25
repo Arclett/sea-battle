@@ -12,3 +12,9 @@
     align-items: center;
     justify-content: center;
 }
+
+@mixin title {
+    color: $subColor;
+    border: 1px solid $subColor;
+    border-radius: 5px;
+}

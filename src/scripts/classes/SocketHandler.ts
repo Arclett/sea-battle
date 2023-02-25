@@ -28,6 +28,12 @@ export class SocketHandler {
 
     start() {
         this.authToken = this.getLocalStorage("authToken");
+        const userData = this.getLocalStorage("userData");
+        if (userData) {
+            console.log(userData);
+            this.userData = JSON.parse(userData);
+        }
+
         if (this.authToken) {
             this.authorization(this.authToken);
             return this.socket;
@@ -53,17 +59,22 @@ export class SocketHandler {
         this.socket.on("auth token", (token: string, user: GetUserData) => {
             this.hideOverlay();
             this.authToken = token;
-            this.saveToLocalStorage();
-            console.log("connected");
-            console.log(`Hello ${user.userName}`);
             this.userData = user;
+            this.saveToLocalStorage();
+            console.log(this.userData);
             const text = document.querySelector(".round-button__text");
-            if (text instanceof HTMLElement) text.textContent = user.userName;
+            if (text instanceof HTMLElement) text.textContent = user.name;
+            const container = document.querySelector(".login-popup");
+            if (!(container instanceof HTMLElement)) return;
+            container.replaceChildren();
         });
 
         this.socket.on("connect_error", (err: Error) => {
             this.hideOverlay();
-            console.log(err.message);
+            const error = document.querySelector(".login__error");
+            if (!(error instanceof HTMLElement)) return;
+            error.classList.remove("hidden");
+            error.textContent = err.message;
         });
 
         this.socket.on("chat message", (text: string) => {
@@ -74,6 +85,10 @@ export class SocketHandler {
             this.hideOverlay();
             this.opponent = opponent;
             window.location.href = "#play-field";
+        });
+
+        this.socket.on("update complete", () => {
+            this.hideOverlay();
         });
     }
 
@@ -88,12 +103,13 @@ export class SocketHandler {
 
     saveToLocalStorage() {
         if (this.authToken) localStorage.setItem("authToken", this.authToken);
+        if (this.userData) localStorage.setItem("userData", JSON.stringify(this.userData));
     }
 
     randomOpponent() {
         if (!this.userData) return;
         this.showOverlay(WaitingWindowType.opponent);
-        this.socket.emit("find random", this.userData.userName);
+        this.socket.emit("find random", this.userData.name);
     }
 
     cancelMathcMaking() {
@@ -116,7 +132,22 @@ export class SocketHandler {
     }
 
     guestJoin(id: string) {
+        console.log("guest join");
         this.showOverlay(WaitingWindowType.opponent);
         this.socket.emit("join by link", id);
+    }
+
+    updateUser(data: GetUserData) {
+        this.saveToLocalStorage();
+        this.showOverlay(WaitingWindowType.connect);
+        this.socket.emit("update user", this.userData);
+    }
+
+    logOut() {
+        localStorage.clear();
+        this.userData = undefined;
+        this.authToken = undefined;
+        window.location.hash = "";
+        location.reload();
     }
 }

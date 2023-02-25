@@ -28,6 +28,8 @@ export class LoginWindow {
             this.loginWindowElements.changeMode.textContent = RegistrationText.regMode;
             this.loginWindowElements.enterButton.textContent = EnterButtonText.regMode;
             this.loginWindowElements.enterButton.className = "login__enter-button reg-mode";
+            this.loginWindowElements.error.classList.add("hidden");
+            this.clearInputs();
             elem.classList.remove("login-mode");
         } else {
             this.loginWindowElements.accPassConfirm.classList.add("hidden");
@@ -36,7 +38,16 @@ export class LoginWindow {
             this.loginWindowElements.changeMode.textContent = RegistrationText.logMode;
             this.loginWindowElements.enterButton.textContent = EnterButtonText.logMode;
             this.loginWindowElements.enterButton.className = "login__enter-button login-mode";
+            this.loginWindowElements.error.classList.add("hidden");
+            this.clearInputs();
             elem.classList.add("login-mode");
         }
+    }
+
+    clearInputs() {
+        this.loginWindowElements.accInput.value = "";
+        this.loginWindowElements.accPass.value = "";
+        this.loginWindowElements.accPassConfirm.value = "";
+        this.loginWindowElements.emailInput.value = "";
     }
 }
