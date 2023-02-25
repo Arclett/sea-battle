@@ -8,13 +8,15 @@ export class BackgroundAroundShips{
   private shipCoordinates = new ShipsCoordinates();
   private orientationOfShip = new OrientationOfShips();
   public backgroundAroundShips: number [][] = [];
+  public backgroundAroundShip: string = color.backgroundAroundShip;
+  public backgroundUnderShip: string = color.backgroundUnderShip;
 
   renderAroundShip() {
     document.getElementById('field')?.childNodes.forEach((element) => {
       (element as HTMLElement).style.background = '';
     });
     this.backgroundAroundShips = [];
-    const coordinatesAroundShips = this.shipCoordinates.getShipsCoordinates();
+    const coordinatesAroundShips = this.shipCoordinates.getShipsCoordinates().coordinatesOfShips;
     coordinatesAroundShips.forEach((ship) => {
       if (ship[1] === ship[0] + 1) {
         ship.unshift(ship[0] - 1);
@@ -34,11 +36,11 @@ export class BackgroundAroundShips{
       ship.forEach((el) => {
         document.getElementById('field')?.childNodes.forEach((element, index) => {
           if (index === el) {
-            (element as HTMLElement).style.background = color.backgroundAroundShip;
+            (element as HTMLElement).style.background = this.backgroundAroundShip;
             this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
           }
           if (index === el + 10) {
-            (element as HTMLElement).style.background = color.backgroundAroundShip;
+            (element as HTMLElement).style.background = this.backgroundAroundShip;
             this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 10);
           }
         });
@@ -48,11 +50,11 @@ export class BackgroundAroundShips{
       ship.forEach((el) => {
         document.getElementById('field')?.childNodes.forEach((element, index) => {
           if (index === el) {
-            (element as HTMLElement).style.background = color.backgroundAroundShip;
+            (element as HTMLElement).style.background = this.backgroundAroundShip;
             this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
           }
           if (index === el - 10) {
-            (element as HTMLElement).style.background = color.backgroundAroundShip;
+            (element as HTMLElement).style.background = this.backgroundAroundShip;
             this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 10);
           }
         });
@@ -63,15 +65,15 @@ export class BackgroundAroundShips{
         if (ind !== 0) {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el - 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 10);
             }
             if (index === el + 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 10);
             }
           });
@@ -83,15 +85,15 @@ export class BackgroundAroundShips{
         if (ind !== ship.length - 1) {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el - 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 10);
             }
             if (index === el + 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 10);
             }
           });
@@ -103,11 +105,11 @@ export class BackgroundAroundShips{
         if (ind !== 0) {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el + 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 10);
             }
           });
@@ -119,11 +121,11 @@ export class BackgroundAroundShips{
         if (ind !== ship.length - 1) {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el + 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 10);
             }
           });
@@ -135,11 +137,11 @@ export class BackgroundAroundShips{
         if (ind !== 0) {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el - 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 10);
             }
           });
@@ -151,11 +153,11 @@ export class BackgroundAroundShips{
         if (ind !== ship.length - 1) {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el - 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 10);
             }
           });
@@ -166,15 +168,15 @@ export class BackgroundAroundShips{
       ship.forEach((el) => {
           document.getElementById('field')?.childNodes.forEach((element, index) => {
             if (index === el) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
             }
             if (index === el - 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 10);
             }
             if (index === el + 10) {
-              (element as HTMLElement).style.background = color.backgroundAroundShip;
+              (element as HTMLElement).style.background = this.backgroundAroundShip;
               this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 10);
             }
           });
@@ -273,32 +275,32 @@ export class BackgroundAroundShips{
   addBackgroundAroundSmallShip({first, second, third, fourth, fifth, sixth, seventh, eighth, ninth}: SmallBackground) {
     const cellsShip = document.getElementsByClassName('droppable');
     this.backgroundAroundShips.push([]);
-    (cellsShip[first] as HTMLElement).style.background = color.backgroundAroundShip;
+    (cellsShip[first] as HTMLElement).style.background = this.backgroundAroundShip;
     this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(first);
-    (cellsShip[second] as HTMLElement).style.background = color.backgroundAroundShip;
+    (cellsShip[second] as HTMLElement).style.background = this.backgroundAroundShip;
     this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(second);
-    (cellsShip[third] as HTMLElement).style.background = color.backgroundAroundShip;
+    (cellsShip[third] as HTMLElement).style.background = this.backgroundAroundShip;
     this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(third);
-    (cellsShip[fourth] as HTMLElement).style.background = color.backgroundAroundShip;
+    (cellsShip[fourth] as HTMLElement).style.background = this.backgroundAroundShip;
     this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(fourth);
     if (fifth) {
-      (cellsShip[fifth] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[fifth] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(fifth);
     }
     if (sixth) {
-      (cellsShip[sixth] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[sixth] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(sixth);
     }
     if (seventh) {
-      (cellsShip[seventh] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[seventh] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(seventh);
     }
     if (eighth || eighth === 0) {
-      (cellsShip[eighth] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[eighth] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(eighth);
     }
     if (ninth) {
-      (cellsShip[ninth] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[ninth] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(ninth);
     }
   }
@@ -317,78 +319,78 @@ export class BackgroundAroundShips{
   //console.log(shipLength)
   if (smallShip === 0) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el + 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el + 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 1);
     });
   } else
   if (smallShip === 9) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el - 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el - 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 1);
     });
   } else
   if (ship[0] + (shipLength * 10) === 90) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el + 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el + 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 1);
     });
   } else
   if (ship[0] + (shipLength * 10) === 99) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el - 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el - 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 1);
     });
   } else
   if (smallShip > 0 && smallShip < 9) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el - 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el - 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 1);
-      (cellsShip[el + 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el + 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 1);
     });
   } else
   if (ship[0] + (shipLength * 10) > 90 && ship[0] + (shipLength * 10) < 99) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el - 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el - 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 1);
-      (cellsShip[el + 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el + 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 1);
     });
   } else
   if (ship[0] % 10 === 0) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el + 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el + 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 1);
     });
   } else
   if (ship[0] % 10 === 9) {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el - 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el - 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 1);
     });
   } else {
     ship.forEach((el) => {
-      (cellsShip[el] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el);
-      (cellsShip[el - 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el - 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el - 1);
-      (cellsShip[el + 1] as HTMLElement).style.background = color.backgroundAroundShip;
+      (cellsShip[el + 1] as HTMLElement).style.background = this.backgroundAroundShip;
       this.backgroundAroundShips[this.backgroundAroundShips.length - 1].push(el + 1);
     });
   }

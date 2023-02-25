@@ -6,6 +6,7 @@ import { RenderMainPage } from "./rendering/RenderMainPage";
 import { SocketHandler } from "./SocketHandler";
 import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
 import { GUIStartPage } from "./GUI/GUIStartPage";
+import { GUISingleGamePage } from "./GUI/GUISingleGamePage";
 
 export class Main {
     loginWindow: LoginWindow;
@@ -27,13 +28,13 @@ export class Main {
         if (!(container instanceof HTMLElement)) return;
         this.container = container;
         new GUIStartPage().renderStartPag();
+        //RenderMainPage.renderMainPage(this.container);
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
         this.account = new Account(this.container);
         document.body.addEventListener("click", this.clickHandler.bind(this));
-
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener("hashchange", this.hashChange.bind(this));
         window.addEventListener("input", this.selectHandler.bind(this));
@@ -126,6 +127,9 @@ export class Main {
 
             case "#account":
                 this.account.start();
+                break;
+            case '#singleGame':
+                new GUISingleGamePage().renderSingleGamePage();
                 break;
 
             default:

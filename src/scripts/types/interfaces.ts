@@ -68,6 +68,7 @@ export interface MultuPlayerElems {
     chatBody: HTMLElement;
     linkBody: HTMLElement;
 }
+
 export interface AccountElems {
     popup: HTMLElement;
     overlay: HTMLElement;
@@ -100,3 +101,10 @@ export interface FieldSkins {
     sand: number;
     [key: string]: number;
 }
+
+
+export interface ShipsCoordinates {
+    coordinatesOfShips: number[][];
+    orientationBoat: string;
+}
+

@@ -66,3 +66,15 @@ export enum Filters {
     fields = "fields",
     all = "all",
 }
+
+export enum BackgroundAttack {
+    wound = 'url("../../../assets/images/wound.png") 0% 0% / contain no-repeat',
+    miss = 'url("../../../assets/images/miss.png") 0% 0% / contain no-repeat',
+}
+
+export enum StatusShip {
+    miss = 'miss',
+    wound = 'wound',
+    dead = 'dead',
+}
+
