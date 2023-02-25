@@ -14,7 +14,7 @@ export class GUIShipsPlacement {
     private ShipCoordinatesWithBackground = new ShipsCoordinatesWithBackground();
     private ShipControl = new ShipsControl();
 
-    renderShipsPlacement(shipSkin: string) {
+    renderShipsPlacement(fieldSkin: string) {
         document.getElementsByClassName("wrapper main__wrapper")[0].innerHTML = "";
         const controlMenu = Element.createElement({ tag: "div", classNote: "controlMenu__container" });
         const circleArrow = Element.createImage({
@@ -53,7 +53,7 @@ export class GUIShipsPlacement {
         document.getElementsByClassName("wrapper main__wrapper")[0].append(fieldContainer, startButton);
         const listOfShips = Element.createElement({ tag: "div", id: "list__shipsHorizontal" });
         const fieldWrapper = Element.createElement({ tag: "div", classNote: "field-wrapper" });
-        fieldWrapper.style.backgroundImage = `url("../../assets/images/fields/default-field.jpg")`;
+        fieldWrapper.style.backgroundImage = `url("../../assets/images/fields/${fieldSkin}-field.jpg")`;
         const field = Element.createElement({ tag: "div", id: "field" });
         fieldWrapper.append(field);
         for (let i = 0; i < 100; i++) {

@@ -22,12 +22,15 @@ export class Account {
         const skinName = [...elem.classList][1];
         const type = [...elem.classList][0].includes("skin") ? "skin" : "field";
         this.elems.overlay.classList.remove("hidden");
+        this.elems.popup.classList.remove("hidden");
+        console.log(this.elems.popup);
         if (!SocketHandler.instance.userData) return;
         RenderAccount.renderPreview(this.elems.popup, skinName, type, SocketHandler.instance.userData);
     }
 
     closePreview() {
         this.elems.overlay.classList.add("hidden");
+        this.elems.popup.classList.add("hidden");
         this.elems.popup.replaceChildren();
     }
 

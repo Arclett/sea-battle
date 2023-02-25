@@ -160,10 +160,10 @@ export class Main {
     }
 
     toSetShipPage() {
-        const shipSkin = SocketHandler.instance.userData?.currentShipSkin
-            ? SocketHandler.instance.userData?.currentShipSkin
-            : "school";
-        new GUIShipsPlacement().renderShipsPlacement("school");
+        const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
+            ? SocketHandler.instance.userData?.currentFieldSkin
+            : "default";
+        new GUIShipsPlacement().renderShipsPlacement(fieldSkin);
     }
 
     multiPlayerStart(query: string | undefined) {

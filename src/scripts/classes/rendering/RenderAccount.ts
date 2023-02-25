@@ -23,7 +23,7 @@ export class RenderAccount {
         RenderAccount.renderGallery(galleryWrapper, data, filter);
 
         const overlay = Element.createElement({ tag: "div", classNote: "preview-overlay hidden" });
-        const popup = Element.createElement({ tag: "div", classNote: "preview-popup" });
+        const popup = Element.createElement({ tag: "div", classNote: "preview-popup hidden" });
 
         container.append(title, accInfoWrapper, statusWrapper, rankWrapper, galleryWrapper, overlay, popup);
 
@@ -31,11 +31,6 @@ export class RenderAccount {
     }
 
     static renderAccInfo(container: HTMLElement, data: GetUserData) {
-        // const accName = Element.createElement({
-        //     tag: "div",
-        //     classNote: "account__account-name",
-        //     content: data.name,
-        // });
         const accGold = Element.createElement({
             tag: "div",
             classNote: "account__account-gold",
@@ -254,17 +249,25 @@ export class RenderAccount {
             skinsGal.append(img);
         }
 
-        const button = Element.createElement({
-            tag: "button",
-            classNote: "skins-preview__set-button",
-        });
+        // const button: HTMLButtonElement = Element.createElement({
+        //     tag: "button",
+        //     classNote: "skins-preview__set-button",
+        // });
+        const button = document.createElement("button");
+        button.className = "skins-preview__set-button";
 
-        if (data.obtFieldSkins.includes(skin) || data.obtShipSkins.includes(skin)) {
-            button.textContent = "Select";
-            button.classList.add("select");
-        } else {
+        if (!(data.obtFieldSkins.includes(skin) || data.obtShipSkins.includes(skin))) {
             button.textContent = "Buy";
             button.classList.add("buy");
+        } else {
+            if (data.currentFieldSkin === skin || data.currentShipSkin === skin) {
+                button.textContent = "Selected";
+                button.classList.add("disabled");
+                button.disabled = true;
+            } else {
+                button.textContent = "Select";
+                button.classList.add("select");
+            }
         }
         const priceElem = Element.createElement({ tag: "div", classNote: "skins-preview__price" });
         let price;
@@ -273,7 +276,7 @@ export class RenderAccount {
         } else {
             price = Utilities.fieldSkins[skin];
         }
-        priceElem.textContent = `${price}`;
+        priceElem.textContent = `Price: ${price} gold`;
         container.dataset.price = `${price}`;
         container.dataset.skin = `${skin}-${type}`;
 

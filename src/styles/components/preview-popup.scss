@@ -1,0 +1,43 @@
+.preview-popup {
+    position: fixed;
+    top: 200px;
+    z-index: 44;
+    width: 40%;
+    left: 30%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    @include title;
+    .gallery__popup-preview {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 40px 1fr 50px;
+        grid-row-gap: 20px;
+        grid-column-gap: 20px;
+        h3 {
+            grid-column: span 3;
+            text-align: center;
+            font-size: 35px;
+            background-color: $subColor;
+            color: white;
+        }
+        .skins-preview__price {
+            color: $subColor;
+            text-align: center;
+            font-size: 30px;
+        }
+        button {
+            font-size: 25px;
+        }
+        .gallery__skins-preview {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            img {
+                height: fit-content;
+                max-height: 300px;
+            }
+        }
+    }
+}
