@@ -1,9 +1,12 @@
 import { io, Socket } from "socket.io-client";
-import { WaitingWindowType } from "../types/enums";
-import { GetUserData } from "../types/interfaces";
+import { GameMode, MainStatus, PlacementStatus, WaitingWindowType } from "../types/enums";
+import { fieldTile, GetUserData, ShipsData } from "../types/interfaces";
 import { Constants } from "./Constants";
+import { ShipsCoordinates } from "./field/shipsCoordinates";
 import { RenderWaitingWindow } from "./rendering/RenderLoadWindow";
+import { RenderMultiGame } from "./rendering/RenderMultiGame";
 import { RenderMultiPlayer } from "./rendering/RenderMultiPlayer";
+import { Visitor } from "./Visitor";
 
 export class SocketHandler {
     static instance: SocketHandler;
@@ -20,10 +23,17 @@ export class SocketHandler {
 
     opponent: string;
 
+    enemyStatus: PlacementStatus;
+
+    currentStatus: MainStatus = MainStatus.other;
+
+    gameMode: GameMode;
+
     constructor() {
         const overlay = document.querySelector(".login__server-overlay");
         if (!(overlay instanceof HTMLElement)) return;
         this.overlay = overlay;
+        console.log(this.currentStatus);
     }
 
     start() {
@@ -84,11 +94,33 @@ export class SocketHandler {
         this.socket.on("start battle", (opponent: string) => {
             this.hideOverlay();
             this.opponent = opponent;
-            window.location.href = "#play-field";
+            this.currentStatus = MainStatus.game;
+            window.location.href = "#shipsPlacement";
         });
 
         this.socket.on("update complete", () => {
             this.hideOverlay();
+        });
+
+        this.socket.on("placement ready", (shipsData: ShipsData) => {
+            Visitor.instance.shipPlacement.enemyStatus = PlacementStatus.ready;
+            Visitor.instance.shipPlacement.enemyPlacement = shipsData;
+            console.log("your opponent is ready");
+        });
+
+        this.socket.on("start game", (turn: string, shipsData?: ShipsData) => {
+            this.hideOverlay();
+
+            if (shipsData) Visitor.instance.shipPlacement.enemyPlacement = shipsData;
+            console.log("placement complete!!!");
+            console.log("enemyShips", Visitor.instance.shipPlacement.enemyPlacement);
+            window.location.hash = "#game?mode=multi";
+            if (turn === "second") this.showOverlay(WaitingWindowType.turn);
+        });
+
+        this.socket.on("my turn", (matrix: fieldTile[], shipsData: ShipsData) => {
+            this.hideOverlay();
+            Visitor.instance.multiGame.takeTurn(matrix, shipsData);
         });
     }
 
@@ -149,5 +181,19 @@ export class SocketHandler {
         this.authToken = undefined;
         window.location.hash = "";
         location.reload();
+    }
+
+    waitingOpponent(shipsData: ShipsData) {
+        this.showOverlay(WaitingWindowType.placement);
+        this.socket.emit("ship placement complete", this.opponent, shipsData);
+    }
+
+    placementReady(shipsData: ShipsData) {
+        this.socket.emit("placement over", this.opponent, shipsData);
+    }
+
+    enemyTurn(matrix: fieldTile[], shipsData: ShipsData) {
+        this.socket.emit("enemy turn", this.opponent, matrix, shipsData);
+        this.showOverlay(WaitingWindowType.turn);
     }
 }

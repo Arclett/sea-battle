@@ -17,6 +17,12 @@ export class RenderWaitingWindow {
             });
             window.appendChild(cancelButton);
         }
+        if (type === WaitingWindowType.placement) {
+            window.textContent = "Waiting for opponent ship placement";
+        }
+        if (type === WaitingWindowType.turn) {
+            window.textContent = "Enemy Turn";
+        }
         container.appendChild(window);
     }
 }
