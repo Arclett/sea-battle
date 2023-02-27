@@ -20,8 +20,6 @@ export class MultiPlayer {
 
     send() {
         if (this.elems.chatInput.value) {
-            console.log(this.elems.chatInput.value);
-
             SocketHandler.instance.currentChat = this.elems.chatBody;
             SocketHandler.instance.sendToChat(this.elems.chatInput.value);
             this.elems.chatInput.value = "";

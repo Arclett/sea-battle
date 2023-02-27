@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import { GameMode, StatusShip } from "../../types/enums";
+import { GameMode, StatusShip, WaitingWindowType } from "../../types/enums";
 import { Element } from "../element/element";
 import { OrientationOfShips } from "../field/orientationOfShips";
 import { RandomShips } from "../field/randomShips";
@@ -95,8 +95,6 @@ export class GUISingleGamePage {
         this.game.ourShipsCoordinates = this.ourShipsCoordinates.coordinatesOfShips;
         this.game.startenemyShipsCoordinates = Array.from(enemyShipsCoordinates.coordinatesOfShips);
         this.game.enemyShipsCoordinatesWithBackground = enemyShipsCoordinatesWithBackground;
-        console.log(this.ourShipsCoordinates);
-        console.log(enemyShipsCoordinates);
         enemyField.childNodes.forEach((smallField) => {
             (smallField as HTMLElement).style.background = "";
             (smallField as HTMLElement).className = "field__small enemyField droppable";
@@ -123,7 +121,6 @@ export class GUISingleGamePage {
         if (res === this.statusShip.dead) {
             this.answer.render(res, i, "Our");
             this.countDeadOurShips += 1;
-            console.log(this.countDeadOurShips);
             if (this.countDeadOurShips === 10) {
                 this.ourWin();
             }
@@ -133,7 +130,6 @@ export class GUISingleGamePage {
     enemyMove(status: string) {
         const postition = this.AI.getRandomCoordinate(status);
         const statusEnemyAttack = this.game.attackEnemy(postition);
-        console.log("AIAttack" + postition);
         if (statusEnemyAttack === this.statusShip.wound) {
             this.AI.woundShip.push(postition);
             this.AI.isWound = true;
@@ -149,7 +145,6 @@ export class GUISingleGamePage {
             if (this.countDeadEnemyShips === 10) {
                 this.enemyWin();
             }
-            console.log(this.countDeadEnemyShips);
         }
         this.answer.render(statusEnemyAttack, postition, "Enemy");
         if (
@@ -161,13 +156,13 @@ export class GUISingleGamePage {
     }
 
     enemyWin() {
-        alert("Enemy win");
         this.disableField();
+        SocketHandler.instance.showOverlay(WaitingWindowType.lose);
     }
 
     ourWin() {
-        alert("WE win");
         this.disableField();
+        SocketHandler.instance.endBattle(GameMode.single);
     }
 
     disableField() {

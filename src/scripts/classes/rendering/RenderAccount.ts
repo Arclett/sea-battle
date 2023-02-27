@@ -72,7 +72,6 @@ export class RenderAccount {
         });
         const expBar = Element.createElement({ tag: "div", classNote: "rank__exp-bar" });
         const expPercentage = Element.createElement({ tag: "div", classNote: "rank__exp-percent" });
-        console.log(rankCalc.percentage);
         expPercentage.style.width = `${rankCalc.percentage}%`;
         expBar.appendChild(expPercentage);
         const nextExp = Element.createElement({
@@ -96,8 +95,6 @@ export class RenderAccount {
             content: `Current Ship skin:`,
         });
         const selectShipSkin = Element.createElement({ tag: "select", classNote: "status__ship-select" });
-        console.log(data);
-        console.log(data.obtShipSkins.split("-"));
         data.obtShipSkins.split("-").forEach((e) => {
             const opt = document.createElement("option");
             opt.textContent = e;
@@ -230,7 +227,6 @@ export class RenderAccount {
 
     static renderPreview(container: HTMLElement, skin: string, type: string, data: GetUserData) {
         container.replaceChildren();
-        console.log(skin);
         const window = Element.createElement({ tag: "div", classNote: "gallery__popup-preview" });
 
         const title = Element.createElement({ tag: "h3", classNote: "skins-preview__title", content: skin });

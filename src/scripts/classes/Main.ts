@@ -1,15 +1,12 @@
 import { Account } from "./account/Account";
 import { LoginWindow } from "./loginWindow/LoginWindow";
 import { MultiPlayer } from "./multiPlayer/MultiPlayer";
-import { PlayField } from "./PlayField/PlayField";
-import { RenderMainPage } from "./rendering/RenderMainPage";
 import { SocketHandler } from "./SocketHandler";
 import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
 import { GUIStartPage } from "./GUI/GUIStartPage";
 import { GUISingleGamePage } from "./GUI/GUISingleGamePage";
 import { GameMode, MainStatus, PlacementStatus } from "../types/enums";
 import { Visitor } from "./Visitor";
-import { ShipsCoordinates } from "./field/shipsCoordinates";
 import { ShipsData } from "../types/interfaces";
 import { MultiGame } from "./multigame.ts/MultiGame";
 
@@ -19,8 +16,6 @@ export class Main {
     socketHandler: SocketHandler;
 
     multiPlayer: MultiPlayer;
-
-    playField: PlayField;
 
     account: Account;
 
@@ -45,19 +40,16 @@ export class Main {
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
-        this.playField = new PlayField(this.container);
         this.account = new Account(this.container);
         this.shipPlacement = new GUIShipsPlacement();
         Visitor.instance.shipPlacement = this.shipPlacement;
-        // this.game = new GUISingleGamePage();
         document.body.addEventListener("click", this.clickHandler.bind(this));
-        document.body.addEventListener('keyup', this.keyHandler.bind(this));
+        document.body.addEventListener("keyup", this.keyHandler.bind(this));
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener("hashchange", this.hashChange.bind(this));
         window.addEventListener("input", this.selectHandler.bind(this));
         window.onbeforeunload = function (e) {
             e.preventDefault();
-            console.log(location.hash);
             if (
                 (location.hash === "#shipsPlacement" || location.hash === "#game") &&
                 SocketHandler.instance.currentStatus === MainStatus.game
@@ -71,7 +63,6 @@ export class Main {
         //изменяем хеш при клике
         e.preventDefault();
         if (!(e.target instanceof HTMLElement)) return;
-        console.log(e.target);
 
         if (e.target.classList.contains("main-title")) this.toMainPage();
 
@@ -141,7 +132,7 @@ export class Main {
         e.preventDefault();
         if (!(e.target instanceof HTMLElement)) return;
 
-        if (e.target.classList.contains("chat__input")) if (e.key === 'Enter') this.multiPlayer.send();
+        if (e.target.classList.contains("chat__input")) if (e.key === "Enter") this.multiPlayer.send();
     }
 
     selectHandler(e: Event) {
@@ -160,7 +151,6 @@ export class Main {
     }
 
     appRouting(hash: string) {
-        console.log("HASH", hash);
         // для примера, поменять в адресной строке хеш на page и любой другой
         const path = hash.split("?")[0];
         const query = hash.split("?")[1];
@@ -169,7 +159,6 @@ export class Main {
                 this.multiPlayerStart(query);
                 break;
             case "#shipsPlacement":
-                console.log("hi");
                 this.toSetShipPage();
                 break;
             case "#account":
@@ -211,7 +200,6 @@ export class Main {
     }
 
     toSetShipPage() {
-        console.log("gogo");
         if (SocketHandler.instance.currentStatus === MainStatus.other) {
             this.toMainPage();
             return;
@@ -228,13 +216,11 @@ export class Main {
             this.toMainPage();
             return;
         }
-        console.log("start");
         const mode = SocketHandler.instance.opponent ? GameMode.multi : GameMode.single;
         if (mode === GameMode.single) {
             window.location.hash = "#game?mode=single";
         }
         if (mode === GameMode.multi) {
-            console.log("start multi");
             const shipsData: ShipsData =
                 Visitor.instance.shipPlacement.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground();
             if (this.shipPlacement.enemyStatus === PlacementStatus.ready) {
@@ -250,16 +236,13 @@ export class Main {
             this.toMainPage();
             return;
         }
-        console.log("begin");
         const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
             ? SocketHandler.instance.userData?.currentFieldSkin
             : "default";
         const mode = query.split("=")[1];
-        console.log(mode);
 
         if (mode === "single") {
             SocketHandler.instance.gameMode = GameMode.single;
-            console.log("single start");
             this.game = new GUISingleGamePage();
             Visitor.instance.game = this.game;
             this.game.renderSingleGamePage(fieldSkin, GameMode.single);
@@ -282,7 +265,6 @@ export class Main {
             this.multiPlayer.start();
             SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
         } else {
-            console.log(SocketHandler.instance.authToken);
             if (!SocketHandler.instance.authToken) {
                 SocketHandler.instance.authorization("guest");
                 SocketHandler.instance.guestJoin(query.split("=")[1]);
@@ -295,7 +277,6 @@ export class Main {
 
     gameClick(elem: HTMLElement) {
         if (SocketHandler.instance.gameMode === GameMode.single) {
-            console.log(this.game);
             this.game.fieldClick(elem);
         } else {
             this.multiGame.fieldClick(elem);

@@ -19,30 +19,6 @@ export class RenderMultiPlayer {
             content: "Random opponent",
         });
 
-        // const findWrapper = Element.createElement({ tag: "div", classNote: "find-opponent" });
-
-        // const findTitle = Element.createElement({
-        //     tag: "h3",
-        //     classNote: "find-opponent__title-find",
-        //     content: "Find opponent by name",
-        // });
-
-        // const findInput = Element.createInput({
-        //     type: "text",
-        //     classNote: "find-opponent__input-find",
-        //     content: "enter name",
-        // });
-
-        // const findButton = Element.createElement({
-        //     tag: "button",
-        //     classNote: "find-opponent__button-find",
-        //     content: "Find",
-        // });
-
-        // const findStatus = Element.createElement({ tag: "div", classNote: "find-opponent__status-find hidden" });
-
-        // findWrapper.append(findTitle, findInput, findButton, findStatus);
-
         const linkWrapper = Element.createElement({ tag: "div", classNote: "create-link" });
 
         const linkTitle = Element.createElement({

@@ -3,9 +3,6 @@ import { Element } from "../element/element";
 
 export class RenderWaitingWindow {
     static renderAwaitWindow(container: HTMLElement, type: WaitingWindowType, multi?: number) {
-        console.log("render window");
-        console.log(type);
-        console.log(multi);
         container.replaceChildren();
         const windowElem = Element.createElement({
             tag: "div",
