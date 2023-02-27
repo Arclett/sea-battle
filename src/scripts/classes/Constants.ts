@@ -1,9 +1,9 @@
 export class Constants {
     static noAuth = "no";
 
-    // static serverUrl = "http://localhost:4000";
+    static serverUrl = "http://localhost:4000";
 
-    static serverUrl = "https://sea-battle-server-production.up.railway.app/";
+    // static serverUrl = "https://sea-battle-server-production.up.railway.app/";
 
     // static clientUrl = "http://localhost:8080";
 

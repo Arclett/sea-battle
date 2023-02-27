@@ -141,6 +141,12 @@ export class SocketHandler {
                 this.endBattle(GameMode.multi);
             }
         });
+
+        this.socket.on("to main page", () => {
+            this.currentStatus = MainStatus.other;
+            this.hideOverlay();
+            window.location.hash = "";
+        });
     }
 
     sendToChat(text: string) {

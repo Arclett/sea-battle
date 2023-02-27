@@ -21,9 +21,10 @@ export class MultiPlayer {
     send() {
         if (this.elems.chatInput.value) {
             console.log(this.elems.chatInput.value);
-            this.elems.chatInput.value = '';
+
             SocketHandler.instance.currentChat = this.elems.chatBody;
             SocketHandler.instance.sendToChat(this.elems.chatInput.value);
+            this.elems.chatInput.value = "";
         }
     }
 
@@ -33,10 +34,8 @@ export class MultiPlayer {
 
     createLink() {
         const userId = SocketHandler.instance.socket.id;
-        // const base = "http://localhost:8080";
         const link = `${Constants.clientUrl}/#multiplayer?room=${userId}`;
         this.elems.linkBody.textContent = link;
-        // SocketHandler.instance.sendLink(userId);
     }
 
     async copyLink() {
