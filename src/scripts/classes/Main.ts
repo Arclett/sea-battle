@@ -51,6 +51,7 @@ export class Main {
         Visitor.instance.shipPlacement = this.shipPlacement;
         // this.game = new GUISingleGamePage();
         document.body.addEventListener("click", this.clickHandler.bind(this));
+        document.body.addEventListener('keyup', this.keyHandler.bind(this));
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
         window.addEventListener("hashchange", this.hashChange.bind(this));
         window.addEventListener("input", this.selectHandler.bind(this));
@@ -134,6 +135,13 @@ export class Main {
             SocketHandler.instance.currentStatus = MainStatus.other;
             this.toMainPage();
         }
+    }
+
+    keyHandler(e: KeyboardEvent) {
+        e.preventDefault();
+        if (!(e.target instanceof HTMLElement)) return;
+
+        if (e.target.classList.contains("chat__input")) if (e.key === 'Enter') this.multiPlayer.send();
     }
 
     selectHandler(e: Event) {
