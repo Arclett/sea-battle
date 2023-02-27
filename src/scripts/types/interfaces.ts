@@ -117,6 +117,12 @@ export interface ShipsData {
 export interface MultiGameElems {
     ourFieldWrapper: HTMLElement;
     enemyFieldWrapper: HTMLElement;
+    ourName: HTMLElement;
+    enemyName: HTMLElement;
+    ourCount: HTMLElement;
+    enemyCount: HTMLElement;
+    ourRank: HTMLElement;
+    enemyRank: HTMLElement;
 }
 
 export interface fieldTile {

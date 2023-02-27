@@ -1,4 +1,5 @@
 import { MultuPlayerElems } from "../../types/interfaces";
+import { Constants } from "../Constants";
 import { RenderMultiPlayer } from "../rendering/RenderMultiPlayer";
 import { SocketHandler } from "../SocketHandler";
 import { Utilities } from "../Utilities";
@@ -31,8 +32,8 @@ export class MultiPlayer {
 
     createLink() {
         const userId = SocketHandler.instance.socket.id;
-        const base = "http://localhost:8080";
-        const link = `${base}/#multiplayer?room=${userId}`;
+        // const base = "http://localhost:8080";
+        const link = `${Constants.clientUrl}/#multiplayer?room=${userId}`;
         this.elems.linkBody.textContent = link;
         // SocketHandler.instance.sendLink(userId);
     }

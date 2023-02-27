@@ -54,6 +54,10 @@ export enum WaitingWindowType {
     opponent = "opponent",
     placement = "placement",
     turn = "turn",
+    winAwait = "winAwait",
+    winReady = "winReady",
+    lose = "lose",
+    winGuest = "winGuest",
 }
 
 export enum WaitingWindowText {

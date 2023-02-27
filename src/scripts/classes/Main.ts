@@ -83,7 +83,7 @@ export class Main {
                 this.loginWindow.start();
             }
         }
-        if (e.target.classList.contains("login__overlay")) location.hash = "";
+        if (e.target.classList.contains("login__overlay")) this.loginWindow.closeWindow();
         if (e.target.classList.contains("login__enter-button")) this.authorization(e.target);
         if (e.target.classList.contains("login__regist-button")) this.loginWindow.switchLoginWindowMode(e.target);
 
@@ -113,6 +113,11 @@ export class Main {
         if (e.target.classList.contains("status__logout")) SocketHandler.instance.logOut();
         if (e.target.classList.contains("filters")) this.account.setFilter(e.target);
 
+        // if (e.target.classList.contains("startField")) {
+        //     SocketHandler.instance.gameMode = GameMode.single;
+        //     this.toSetShipPage();
+        // }
+
         //ship placement
 
         if (e.target.classList.contains("start-game__button")) {
@@ -124,6 +129,11 @@ export class Main {
         if (e.target.classList.contains("enemyField")) {
             this.gameClick(e.target);
         }
+
+        if (e.target.classList.contains("battle__confirm-button")) {
+            SocketHandler.instance.currentStatus = MainStatus.other;
+            this.toMainPage();
+        }
     }
 
     selectHandler(e: Event) {
@@ -133,14 +143,16 @@ export class Main {
     }
 
     hashChange() {
-        if (SocketHandler.instance.socket) {
-            this.appRouting(location.hash);
-        } else {
-            this.appRouting(" ");
-        }
+        // if (SocketHandler.instance.socket) {
+        //     this.appRouting(location.hash);
+        // } else {
+        //     this.appRouting(" ");
+        // }
+        this.appRouting(location.hash);
     }
 
     appRouting(hash: string) {
+        console.log("HASH", hash);
         // для примера, поменять в адресной строке хеш на page и любой другой
         const path = hash.split("?")[0];
         const query = hash.split("?")[1];
@@ -149,9 +161,9 @@ export class Main {
                 this.multiPlayerStart(query);
                 break;
             case "#shipsPlacement":
+                console.log("hi");
                 this.toSetShipPage();
                 break;
-
             case "#account":
                 this.account.start();
                 break;
@@ -191,6 +203,7 @@ export class Main {
     }
 
     toSetShipPage() {
+        console.log("gogo");
         if (SocketHandler.instance.currentStatus === MainStatus.other) {
             this.toMainPage();
             return;
@@ -198,6 +211,7 @@ export class Main {
         const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
             ? SocketHandler.instance.userData?.currentFieldSkin
             : "default";
+
         this.shipPlacement.renderShipsPlacement(fieldSkin);
     }
 
@@ -206,11 +220,13 @@ export class Main {
             this.toMainPage();
             return;
         }
+        console.log("start");
         const mode = SocketHandler.instance.opponent ? GameMode.multi : GameMode.single;
         if (mode === GameMode.single) {
             window.location.hash = "#game?mode=single";
         }
         if (mode === GameMode.multi) {
+            console.log("start multi");
             const shipsData: ShipsData =
                 Visitor.instance.shipPlacement.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground();
             if (this.shipPlacement.enemyStatus === PlacementStatus.ready) {
@@ -226,6 +242,7 @@ export class Main {
             this.toMainPage();
             return;
         }
+        console.log("begin");
         const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
             ? SocketHandler.instance.userData?.currentFieldSkin
             : "default";
@@ -251,6 +268,9 @@ export class Main {
 
     multiPlayerStart(query: string | undefined) {
         if (!query) {
+            if (!SocketHandler.instance.socket) {
+                this.toMainPage();
+            }
             this.multiPlayer.start();
             SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
         } else {

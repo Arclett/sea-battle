@@ -1,18 +1,27 @@
 import { BackgroundAttack, shipsImages, TileStatus } from "../../types/enums";
-import { fieldTile, ShipsData } from "../../types/interfaces";
+import { fieldTile, GetUserData, ShipsData } from "../../types/interfaces";
 import { Element } from "../element/element";
 import { Utilities } from "../Utilities";
 
 export class RenderMultiGame {
     static renderWrapper(
         container: HTMLElement,
-        fieldSkin: string,
         ourShips: ShipsData,
-        enemyShips: ShipsData,
         ourMatrix: fieldTile[],
-        enemyMatrix: fieldTile[]
+        enemyMatrix: fieldTile[],
+        ourData: GetUserData | undefined,
+        enemyData: GetUserData | undefined
     ) {
         container.replaceChildren();
+        const ourFieldSkin = ourData ? ourData.currentFieldSkin : "default";
+        const enemyFieldSkin = enemyData ? enemyData.currentFieldSkin : "default";
+
+        const ourShipSkin = ourData ? ourData.currentShipSkin : "school";
+        const enemyShipSkin = enemyData ? enemyData.currentShipSkin : "school";
+
+        const ourStatus = Element.createElement({ tag: "div", classNote: "battle__our-status" });
+        const [ourName, ourRank, ourCount] = RenderMultiGame.renderStatus(ourStatus, "our");
+
         const gameContainer = Element.createElement({ tag: "div", classNote: "game__container" });
 
         const ourFieldWrapper = Element.createElement({ tag: "div", classNote: "field-wrapper" });
@@ -23,19 +32,32 @@ export class RenderMultiGame {
         });
         ourFieldWrapper.append(ourField);
 
-        ourFieldWrapper.style.backgroundImage = `url("../../assets/images/fields/${fieldSkin}-field.jpg")`;
+        ourFieldWrapper.style.backgroundImage = `url("../../assets/images/fields/${ourFieldSkin}-field.jpg")`;
 
         RenderMultiGame.renderMyField(ourField, ourShips, ourMatrix);
         const enemyFieldWrapper = Element.createElement({ tag: "div", classNote: "field-wrapper" });
         const enemyField = Element.createElement({ tag: "div", id: "field", classNote: "field__container" });
         enemyFieldWrapper.append(enemyField);
-        enemyFieldWrapper.style.backgroundImage = `url("../../assets/images/fields/${fieldSkin}-field.jpg")`;
+        enemyFieldWrapper.style.backgroundImage = `url("../../assets/images/fields/${enemyFieldSkin}-field.jpg")`;
 
         RenderMultiGame.renderEnemyField(enemyField, enemyMatrix);
-        gameContainer.append(ourFieldWrapper, enemyFieldWrapper);
+
+        const enemyStatus = Element.createElement({ tag: "div", classNote: "battle__enemy-status" });
+        const [enemyName, enemyRank, enemyCount] = RenderMultiGame.renderStatus(enemyStatus, "enemy");
+
+        gameContainer.append(ourStatus, ourFieldWrapper, enemyFieldWrapper, enemyStatus);
         container.append(gameContainer);
 
-        return { ourFieldWrapper: ourField, enemyFieldWrapper: enemyField };
+        return {
+            ourFieldWrapper: ourField,
+            enemyFieldWrapper: enemyField,
+            ourName: ourName,
+            enemyName: enemyName,
+            ourCount: ourCount,
+            enemyCount: enemyCount,
+            ourRank: ourRank,
+            enemyRank: enemyRank,
+        };
     }
 
     static renderMyField(container: HTMLElement, ourShips: ShipsData, ourMatrix: fieldTile[]) {
@@ -123,5 +145,17 @@ export class RenderMultiGame {
             elem.style.height = "132px";
             elem.style.width = "33px";
         }
+    }
+
+    static renderStatus(container: HTMLElement, type: string) {
+        const userName = Element.createElement({ tag: "h2", classNote: `battle__name ${type}-name` });
+        const rank = Element.createElement({ tag: "div", classNote: `battle__rank ${type}-rank` });
+        const shipCount = Element.createElement({
+            tag: "div",
+            classNote: `battle__count ${type}-count`,
+            content: "Ships destroyed: 0/10",
+        });
+        container.append(userName, rank, shipCount);
+        return [userName, rank, shipCount];
     }
 }

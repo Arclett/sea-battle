@@ -41,9 +41,10 @@ export class GUIStartPage {
         });
 
         singleGameStartButton.addEventListener("click", () => {
-            localStorage.setItem("game", "singleGame");
+            // localStorage.setItem("game", "singleGame");
             SocketHandler.instance.currentStatus = MainStatus.game;
-            location.hash = "shipsPlacement";
+            window.location.hash = "#shipsPlacement";
+            console.log("go");
         });
         gameMenu.append(infoWrapper, singleGameContainer, multiGameContainer);
         singleGameContainer.append(singleGameImage, singleGameStartButton);

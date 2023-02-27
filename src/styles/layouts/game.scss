@@ -12,4 +12,10 @@
         //     }
         // }
     }
+    .battle__our-status,
+    .battle__enemy-status {
+        display: flex;
+        flex-direction: column;
+        font-size: 25px;
+    }
 }

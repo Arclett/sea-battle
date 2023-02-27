@@ -19,6 +19,8 @@ export class SocketHandler {
 
     userData: GetUserData | undefined;
 
+    enemyData: GetUserData | undefined;
+
     currentChat: HTMLElement;
 
     opponent: string;
@@ -33,7 +35,6 @@ export class SocketHandler {
         const overlay = document.querySelector(".login__server-overlay");
         if (!(overlay instanceof HTMLElement)) return;
         this.overlay = overlay;
-        console.log(this.currentStatus);
     }
 
     start() {
@@ -91,7 +92,9 @@ export class SocketHandler {
             if (this.currentChat) RenderMultiPlayer.renderMessage(this.currentChat, text);
         });
 
-        this.socket.on("start battle", (opponent: string) => {
+        this.socket.on("start battle", (opponent: string, data: GetUserData) => {
+            console.log(data, "userData");
+            this.enemyData = data;
             this.hideOverlay();
             this.opponent = opponent;
             this.currentStatus = MainStatus.game;
@@ -100,6 +103,10 @@ export class SocketHandler {
 
         this.socket.on("update complete", () => {
             this.hideOverlay();
+        });
+
+        this.socket.on("winner updated", (multi) => {
+            this.showOverlay(WaitingWindowType.winReady, multi);
         });
 
         this.socket.on("placement ready", (shipsData: ShipsData) => {
@@ -122,6 +129,18 @@ export class SocketHandler {
             this.hideOverlay();
             Visitor.instance.multiGame.takeTurn(matrix, shipsData);
         });
+
+        this.socket.on("lose", () => {
+            this.showOverlay(WaitingWindowType.lose);
+            this.currentStatus = MainStatus.other;
+        });
+
+        this.socket.on("user leave", (id: string) => {
+            if (this.opponent === id && this.currentStatus === MainStatus.game) {
+                console.log("leave");
+                this.endBattle(GameMode.multi);
+            }
+        });
     }
 
     sendToChat(text: string) {
@@ -141,7 +160,7 @@ export class SocketHandler {
     randomOpponent() {
         if (!this.userData) return;
         this.showOverlay(WaitingWindowType.opponent);
-        this.socket.emit("find random", this.userData.name);
+        this.socket.emit("find random");
     }
 
     cancelMathcMaking() {
@@ -149,8 +168,13 @@ export class SocketHandler {
         this.hideOverlay();
     }
 
-    showOverlay(type: WaitingWindowType) {
-        RenderWaitingWindow.renderAwaitWindow(this.overlay, type);
+    showOverlay(type: WaitingWindowType, multi?: number) {
+        if (multi) {
+            RenderWaitingWindow.renderAwaitWindow(this.overlay, type, multi);
+        } else {
+            RenderWaitingWindow.renderAwaitWindow(this.overlay, type);
+        }
+
         this.overlay.classList.remove("hidden");
     }
     hideOverlay() {
@@ -195,5 +219,27 @@ export class SocketHandler {
     enemyTurn(matrix: fieldTile[], shipsData: ShipsData) {
         this.socket.emit("enemy turn", this.opponent, matrix, shipsData);
         this.showOverlay(WaitingWindowType.turn);
+    }
+
+    endBattle(mode: GameMode) {
+        console.log("winner!");
+        this.socket.emit("winner", this.opponent);
+        let multi;
+        if (mode === GameMode.multi) multi = 5;
+        else multi = 1;
+        if (this.userData) {
+            this.showOverlay(WaitingWindowType.winAwait, multi);
+            this.userData.gold += 50 * multi;
+            this.userData.exp += 20 * multi;
+            if (mode === GameMode.multi) {
+                this.userData.winsPvP += 1;
+            } else {
+                this.userData.winsPvE += 1;
+            }
+            this.saveToLocalStorage();
+            this.socket.emit("update winner", this.userData, multi);
+        } else {
+            this.showOverlay(WaitingWindowType.winGuest);
+        }
     }
 }
