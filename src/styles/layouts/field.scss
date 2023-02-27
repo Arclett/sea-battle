@@ -1,15 +1,13 @@
-
-.field__container {
+// .field__container {
+//     display: flex;
+//     gap: 20px;
+//     margin-top: 20px;
+//     justify-content: space-around;
+// }
+.shipsPlacement__container {
     display: flex;
     gap: 20px;
     margin-top: 20px;
-    justify-content: space-around;
-}
-.shipsPlacement__container {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-
 }
 
 #list__shipsHorizontal {
@@ -29,7 +27,6 @@
     border-radius: 5px;
 }
 
-
 #field {
     border: 2px solid rgb(55, 0, 255);
     display: grid;
@@ -40,10 +37,10 @@
 }
 
 .field__container {
-  border: 2px solid rgb(55, 0, 255);
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+    border: 2px solid rgb(55, 0, 255);
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(3, 1fr);
 }
 
 .field__small {
@@ -133,12 +130,12 @@
     border-radius: 5px;
 }
 
-.game__container {
-  padding-top: 100px;
-  display: flex;
-  justify-content: space-around;
-}
+// .game__container {
+//     padding-top: 100px;
+//     display: flex;
+//     justify-content: space-around;
+// }
 
 .enemyField:hover {
-  cursor: pointer;
+    cursor: pointer;
 }

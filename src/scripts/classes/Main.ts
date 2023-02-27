@@ -7,6 +7,11 @@ import { SocketHandler } from "./SocketHandler";
 import { GUIShipsPlacement } from "./GUI/GUIShipsPlacement";
 import { GUIStartPage } from "./GUI/GUIStartPage";
 import { GUISingleGamePage } from "./GUI/GUISingleGamePage";
+import { GameMode, MainStatus, PlacementStatus } from "../types/enums";
+import { Visitor } from "./Visitor";
+import { ShipsCoordinates } from "./field/shipsCoordinates";
+import { ShipsData } from "../types/interfaces";
+import { MultiGame } from "./multigame.ts/MultiGame";
 
 export class Main {
     loginWindow: LoginWindow;
@@ -21,19 +26,30 @@ export class Main {
 
     container: HTMLElement;
 
+    startPage: GUIStartPage;
+
+    shipPlacement: GUIShipsPlacement;
+
+    game: GUISingleGamePage;
+
+    multiGame: MultiGame;
+
     start() {
         const overlay = document.querySelector(".login__server-overlay");
         if (!(overlay instanceof HTMLElement)) return;
         const container = document.querySelector(".main__wrapper");
         if (!(container instanceof HTMLElement)) return;
         this.container = container;
-        new GUIStartPage().renderStartPag();
-        //RenderMainPage.renderMainPage(this.container);
+        this.startPage = new GUIStartPage();
+        this.startPage.renderStartPag();
         SocketHandler.instance.start();
         this.loginWindow = new LoginWindow();
         this.multiPlayer = new MultiPlayer(this.container);
         this.playField = new PlayField(this.container);
         this.account = new Account(this.container);
+        this.shipPlacement = new GUIShipsPlacement();
+        Visitor.instance.shipPlacement = this.shipPlacement;
+        // this.game = new GUISingleGamePage();
         document.body.addEventListener("click", this.clickHandler.bind(this));
         document.body.addEventListener('keyup', this.keyHandler.bind(this));
         window.addEventListener("beforeunload", SocketHandler.instance.saveToLocalStorage.bind(this));
@@ -42,7 +58,10 @@ export class Main {
         window.onbeforeunload = function (e) {
             e.preventDefault();
             console.log(location.hash);
-            if (location.hash === "#shipsPlacement") {
+            if (
+                (location.hash === "#shipsPlacement" || location.hash === "#game") &&
+                SocketHandler.instance.currentStatus === MainStatus.game
+            ) {
                 return "Are you shure you want to leave game?";
             }
         };
@@ -65,7 +84,7 @@ export class Main {
                 this.loginWindow.start();
             }
         }
-        if (e.target.classList.contains("login__overlay")) location.hash = "";
+        if (e.target.classList.contains("login__overlay")) this.loginWindow.closeWindow();
         if (e.target.classList.contains("login__enter-button")) this.authorization(e.target);
         if (e.target.classList.contains("login__regist-button")) this.loginWindow.switchLoginWindowMode(e.target);
 
@@ -94,6 +113,28 @@ export class Main {
         }
         if (e.target.classList.contains("status__logout")) SocketHandler.instance.logOut();
         if (e.target.classList.contains("filters")) this.account.setFilter(e.target);
+
+        // if (e.target.classList.contains("startField")) {
+        //     SocketHandler.instance.gameMode = GameMode.single;
+        //     this.toSetShipPage();
+        // }
+
+        //ship placement
+
+        if (e.target.classList.contains("start-game__button")) {
+            if (this.shipPlacement.checkCoords()) this.startGame();
+        }
+
+        //game
+
+        if (e.target.classList.contains("enemyField")) {
+            this.gameClick(e.target);
+        }
+
+        if (e.target.classList.contains("battle__confirm-button")) {
+            SocketHandler.instance.currentStatus = MainStatus.other;
+            this.toMainPage();
+        }
     }
 
     keyHandler(e: KeyboardEvent) {
@@ -110,14 +151,16 @@ export class Main {
     }
 
     hashChange() {
-        if (SocketHandler.instance.socket) {
-            this.appRouting(location.hash);
-        } else {
-            this.appRouting(" ");
-        }
+        // if (SocketHandler.instance.socket) {
+        //     this.appRouting(location.hash);
+        // } else {
+        //     this.appRouting(" ");
+        // }
+        this.appRouting(location.hash);
     }
 
     appRouting(hash: string) {
+        console.log("HASH", hash);
         // для примера, поменять в адресной строке хеш на page и любой другой
         const path = hash.split("?")[0];
         const query = hash.split("?")[1];
@@ -125,23 +168,19 @@ export class Main {
             case "#multiplayer":
                 this.multiPlayerStart(query);
                 break;
-
-            case "#play-field":
-                this.playField.start();
-                break;
             case "#shipsPlacement":
+                console.log("hi");
                 this.toSetShipPage();
                 break;
-
             case "#account":
                 this.account.start();
                 break;
-            case '#singleGame':
-                new GUISingleGamePage().renderSingleGamePage();
+            case "#game":
+                this.beginBattle(query);
                 break;
 
             default:
-                new GUIStartPage().renderStartPag();
+                this.startPage.renderStartPag();
                 break;
         }
     }
@@ -172,14 +211,74 @@ export class Main {
     }
 
     toSetShipPage() {
+        console.log("gogo");
+        if (SocketHandler.instance.currentStatus === MainStatus.other) {
+            this.toMainPage();
+            return;
+        }
         const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
             ? SocketHandler.instance.userData?.currentFieldSkin
             : "default";
-        new GUIShipsPlacement().renderShipsPlacement(fieldSkin);
+
+        this.shipPlacement.renderShipsPlacement(fieldSkin);
+    }
+
+    startGame() {
+        if (SocketHandler.instance.currentStatus === MainStatus.other) {
+            this.toMainPage();
+            return;
+        }
+        console.log("start");
+        const mode = SocketHandler.instance.opponent ? GameMode.multi : GameMode.single;
+        if (mode === GameMode.single) {
+            window.location.hash = "#game?mode=single";
+        }
+        if (mode === GameMode.multi) {
+            console.log("start multi");
+            const shipsData: ShipsData =
+                Visitor.instance.shipPlacement.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground();
+            if (this.shipPlacement.enemyStatus === PlacementStatus.ready) {
+                SocketHandler.instance.placementReady(shipsData);
+            } else {
+                SocketHandler.instance.waitingOpponent(shipsData);
+            }
+        }
+    }
+
+    beginBattle(query: string) {
+        if (SocketHandler.instance.currentStatus === MainStatus.other) {
+            this.toMainPage();
+            return;
+        }
+        console.log("begin");
+        const fieldSkin = SocketHandler.instance.userData?.currentFieldSkin
+            ? SocketHandler.instance.userData?.currentFieldSkin
+            : "default";
+        const mode = query.split("=")[1];
+        console.log(mode);
+
+        if (mode === "single") {
+            SocketHandler.instance.gameMode = GameMode.single;
+            console.log("single start");
+            this.game = new GUISingleGamePage();
+            Visitor.instance.game = this.game;
+            this.game.renderSingleGamePage(fieldSkin, GameMode.single);
+        } else {
+            SocketHandler.instance.gameMode = GameMode.multi;
+            const ourShips: ShipsData =
+                this.shipPlacement.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground();
+            const enemyShips: ShipsData = this.shipPlacement.enemyPlacement;
+            this.multiGame = new MultiGame(ourShips, enemyShips, this.container);
+            Visitor.instance.multiGame = this.multiGame;
+            this.multiGame.start();
+        }
     }
 
     multiPlayerStart(query: string | undefined) {
         if (!query) {
+            if (!SocketHandler.instance.socket) {
+                this.toMainPage();
+            }
             this.multiPlayer.start();
             SocketHandler.instance.currentChat = this.multiPlayer.elems.chatBody;
         } else {
@@ -191,6 +290,15 @@ export class Main {
                 SocketHandler.instance.authorization(SocketHandler.instance.authToken);
                 SocketHandler.instance.guestJoin(query.split("=")[1]);
             }
+        }
+    }
+
+    gameClick(elem: HTMLElement) {
+        if (SocketHandler.instance.gameMode === GameMode.single) {
+            console.log(this.game);
+            this.game.fieldClick(elem);
+        } else {
+            this.multiGame.fieldClick(elem);
         }
     }
 }

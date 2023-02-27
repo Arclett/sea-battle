@@ -52,6 +52,12 @@ export enum shipsLength {
 export enum WaitingWindowType {
     connect = "connect",
     opponent = "opponent",
+    placement = "placement",
+    turn = "turn",
+    winAwait = "winAwait",
+    winReady = "winReady",
+    lose = "lose",
+    winGuest = "winGuest",
 }
 
 export enum WaitingWindowText {
@@ -73,8 +79,29 @@ export enum BackgroundAttack {
 }
 
 export enum StatusShip {
-    miss = 'miss',
-    wound = 'wound',
-    dead = 'dead',
+    miss = "miss",
+    wound = "wound",
+    dead = "dead",
 }
 
+export enum GameMode {
+    multi = "multi",
+    single = "single",
+}
+
+export enum PlacementStatus {
+    ready = "ready",
+    placement = "placement",
+}
+
+export enum MainStatus {
+    game = "game",
+    other = "other",
+}
+export enum TileStatus {
+    clear = "clear",
+    wound = "wound",
+    ship = "ship",
+    dead = "dead",
+    miss = "miss",
+}

@@ -1,8 +1,9 @@
+import { MainStatus } from "../../types/enums";
 import { Element } from "../element/element";
+import { SocketHandler } from "../SocketHandler";
 import { Utilities } from "../Utilities";
 
 export class GUIStartPage {
-
     renderStartPag() {
         document.getElementsByClassName("wrapper main__wrapper")[0].innerHTML = "";
 
@@ -40,23 +41,18 @@ export class GUIStartPage {
         });
 
         singleGameStartButton.addEventListener("click", () => {
-            localStorage.setItem("game", "singleGame");
-            location.hash = "shipsPlacement";
+            // localStorage.setItem("game", "singleGame");
+            SocketHandler.instance.currentStatus = MainStatus.game;
+            window.location.hash = "#shipsPlacement";
+            console.log("go");
         });
         gameMenu.append(infoWrapper, singleGameContainer, multiGameContainer);
         singleGameContainer.append(singleGameImage, singleGameStartButton);
         multiGameContainer.append(multiGameImage, multiGameStartButton);
     }
-
-    renderGameInfo(container: HTMLElement) {
-        const title = Element.createElement({ tag: "h2", content: "Welcome to Sea Battle!" });
-
-        const greet = Element.createElement({ tag: "div", content: Utilities.greet });
-    }
 }
 
-
-  /*renderStartPag() {
+/*renderStartPag() {
     document.getElementsByClassName('wrapper main__wrapper')[0].replaceChildren();
     const gameMenu = Element.createElement({ tag: 'div', classNote: 'gameMenu__container' });
     document.getElementsByClassName('wrapper main__wrapper')[0].append(gameMenu);
@@ -75,5 +71,3 @@ export class GUIStartPage {
     singleGameContainer.append(singleGameImage, singleGameStartButton);
     multiGameContainer.append(multiGameImage, multiGameStartButton);
   }*/
-}
-

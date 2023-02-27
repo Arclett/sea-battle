@@ -1,3 +1,5 @@
+import { StatusShip, TileStatus } from "./enums";
+
 export interface ElementInterface {
     tag: string;
     id?: string;
@@ -102,9 +104,30 @@ export interface FieldSkins {
     [key: string]: number;
 }
 
-
 export interface ShipsCoordinates {
     coordinatesOfShips: number[][];
     orientationBoat: string;
 }
 
+export interface ShipsData {
+    ShipsCoordinates: ShipsCoordinates;
+    ShipsCoordinatesWithBackground: number[][];
+}
+
+export interface MultiGameElems {
+    ourFieldWrapper: HTMLElement;
+    enemyFieldWrapper: HTMLElement;
+    ourName: HTMLElement;
+    enemyName: HTMLElement;
+    ourCount: HTMLElement;
+    enemyCount: HTMLElement;
+    ourRank: HTMLElement;
+    enemyRank: HTMLElement;
+}
+
+export interface fieldTile {
+    tileStatus: TileStatus;
+    shipHead: true | false;
+    shipIndex: number | undefined;
+    shipStatus: StatusShip | undefined;
+}
