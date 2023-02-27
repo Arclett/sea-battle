@@ -3,7 +3,7 @@ import "./styles/main.scss";
 import { Main } from "./scripts/classes/Main";
 import { SocketHandler } from "./scripts/classes/SocketHandler";
 import { Visitor } from "./scripts/classes/Visitor";
-import { GameMode, MainStatus } from "./scripts/types/enums";
+import { MainStatus } from "./scripts/types/enums";
 
 const main = new Main();
 

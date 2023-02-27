@@ -13,7 +13,6 @@ export class Account {
     }
 
     start() {
-        console.log(SocketHandler.instance.userData);
         if (!SocketHandler.instance.userData) return;
         this.elems = RenderAccount.renderAccount(this.container, SocketHandler.instance.userData);
     }
@@ -23,7 +22,6 @@ export class Account {
         const type = [...elem.classList][0].includes("skin") ? "skin" : "field";
         this.elems.overlay.classList.remove("hidden");
         this.elems.popup.classList.remove("hidden");
-        console.log(this.elems.popup);
         if (!SocketHandler.instance.userData) return;
         RenderAccount.renderPreview(this.elems.popup, skinName, type, SocketHandler.instance.userData);
     }
@@ -50,7 +48,6 @@ export class Account {
     }
 
     select(elem: HTMLElement | HTMLSelectElement) {
-        console.log(elem);
         let skinName: string | undefined;
         if (elem instanceof HTMLElement) {
             skinName = this.elems.popup.dataset.skin;
@@ -58,7 +55,6 @@ export class Account {
         if (elem instanceof HTMLSelectElement) {
             skinName = elem.value;
         }
-        console.log(skinName);
         if (!SocketHandler.instance.userData || !skinName) return;
         if (skinName.split("-")[1] === "skin") {
             SocketHandler.instance.userData.currentShipSkin = skinName.split("-")[0];

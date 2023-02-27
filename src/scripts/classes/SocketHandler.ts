@@ -41,7 +41,6 @@ export class SocketHandler {
         this.authToken = this.getLocalStorage("authToken");
         const userData = this.getLocalStorage("userData");
         if (userData) {
-            console.log(userData);
             this.userData = JSON.parse(userData);
         }
 
@@ -52,7 +51,6 @@ export class SocketHandler {
     }
 
     authorization(token: string, userName?: string, password?: string, email?: string) {
-        console.log(token);
         this.showOverlay(WaitingWindowType.connect);
         this.socket = io(Constants.serverUrl, {
             transportOptions: {
@@ -72,7 +70,6 @@ export class SocketHandler {
             this.authToken = token;
             this.userData = user;
             this.saveToLocalStorage();
-            console.log(this.userData);
             const text = document.querySelector(".round-button__text");
             if (text instanceof HTMLElement) text.textContent = user.name;
             const container = document.querySelector(".login-popup");
@@ -93,7 +90,6 @@ export class SocketHandler {
         });
 
         this.socket.on("start battle", (opponent: string, data: GetUserData) => {
-            console.log(data, "userData");
             this.enemyData = data;
             this.hideOverlay();
             this.opponent = opponent;
@@ -112,15 +108,12 @@ export class SocketHandler {
         this.socket.on("placement ready", (shipsData: ShipsData) => {
             Visitor.instance.shipPlacement.enemyStatus = PlacementStatus.ready;
             Visitor.instance.shipPlacement.enemyPlacement = shipsData;
-            console.log("your opponent is ready");
         });
 
         this.socket.on("start game", (turn: string, shipsData?: ShipsData) => {
             this.hideOverlay();
 
             if (shipsData) Visitor.instance.shipPlacement.enemyPlacement = shipsData;
-            console.log("placement complete!!!");
-            console.log("enemyShips", Visitor.instance.shipPlacement.enemyPlacement);
             window.location.hash = "#game?mode=multi";
             if (turn === "second") this.showOverlay(WaitingWindowType.turn);
         });
@@ -137,7 +130,6 @@ export class SocketHandler {
 
         this.socket.on("user leave", (id: string) => {
             if (this.opponent === id && this.currentStatus === MainStatus.game) {
-                console.log("leave");
                 this.endBattle(GameMode.multi);
             }
         });
@@ -194,7 +186,6 @@ export class SocketHandler {
     }
 
     guestJoin(id: string) {
-        console.log("guest join");
         this.showOverlay(WaitingWindowType.opponent);
         this.socket.emit("join by link", id);
     }
@@ -228,7 +219,6 @@ export class SocketHandler {
     }
 
     endBattle(mode: GameMode) {
-        console.log("winner!");
         this.socket.emit("winner", this.opponent);
         let multi;
         if (mode === GameMode.multi) multi = 5;

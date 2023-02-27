@@ -48,15 +48,6 @@ export class GUIShipsPlacement {
             classNote: "start-game__button",
             content: "Start Game",
         });
-        // startButton.addEventListener("click", () => {
-        //     if (
-        //         this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinates
-        //             .coordinatesOfShips.length === 10
-        //     ) {
-        //         //console.log(this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinates, this.ShipCoordinatesWithBackground.getShipsCoordinatesWithBackground().ShipsCoordinatesWithBackground);
-        //         location.hash = "singleGame";
-        //     }
-        // });
         circleArrow.addEventListener("click", () => {
             this.orientationOfShip.changeOrientationShips();
         });

@@ -19,7 +19,6 @@ export class MultiGame {
         this.container = container;
         this.renderCoords = ourCoords;
         this.shipCount = 0;
-        console.log("create multigame class");
     }
 
     start() {
@@ -48,13 +47,6 @@ export class MultiGame {
                 Utilities.calcRank(SocketHandler.instance.enemyData.exp).curRank
             }`;
         }
-        // this.elems.ourName.textContent = SocketHandler.instance.userData
-        //     ? SocketHandler.instance.userData.name
-        //     : "Guest";
-        // this.elems.enemyName.textContent = SocketHandler.instance.enemyData
-        //     ? SocketHandler.instance.enemyData.name
-        //     : "Guest";
-        // this.elems.ourRank;
     }
 
     creaetFieldMatrix(coords: ShipsData) {
@@ -67,7 +59,6 @@ export class MultiGame {
             let head = false;
             if (heads.includes(i)) {
                 status = TileStatus.ship;
-                console.log("HEAD");
                 head = true;
                 index = heads.indexOf(i);
             }
@@ -81,7 +72,6 @@ export class MultiGame {
             }
             res.push({ tileStatus: status, shipIndex: index, shipStatus: StatusShip.miss, shipHead: head });
         }
-        console.log(res);
         return res;
     }
 
@@ -90,7 +80,6 @@ export class MultiGame {
         if (!ind) return;
         const tile = this.enemyMatrix[Number(ind)];
         if (tile.tileStatus === TileStatus.wound || tile.tileStatus === TileStatus.miss) return;
-        let res;
         if (this.enemyCoords.ShipsCoordinates.coordinatesOfShips.flat().includes(+ind)) {
             this.enemyMatrix[Number(ind)].tileStatus = TileStatus.wound;
             const ship = this.enemyCoords.ShipsCoordinates.coordinatesOfShips.find((e) => e.includes(+ind));

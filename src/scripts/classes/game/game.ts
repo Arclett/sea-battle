@@ -38,7 +38,6 @@ export class Game {
         let answer: string = this.statusShip.miss;
         ships.forEach((ship, numberOfShip) => {
             if (ship.includes(index) && ship.length > 1) {
-                console.log(ship.length);
                 answer = this.statusShip.wound;
                 ship.forEach((cell, ind) => {
                     if (cell === index) {
@@ -51,7 +50,6 @@ export class Game {
                 answer = this.statusShip.dead;
             }
         });
-        console.log(answer);
         return answer;
     }
 
