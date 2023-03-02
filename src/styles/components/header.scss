@@ -1,0 +1,35 @@
+.header {
+    height: 60px;
+    background: $mainColor;
+}
+
+.header__wrapper {
+    display: flex;
+    justify-content: space-between;
+    h1 {
+        color: $background;
+        font-size: 35px;
+        margin-top: 10px;
+    }
+}
+
+.round-button__text {
+    display: none;
+}
+
+.header__round-button:hover {
+    background: $background;
+
+    .round-button__link {
+        background: $mainColor;
+    }
+
+    .round-button__text {
+        display: block;
+        margin: auto;
+    }
+
+    .round-button__icon {
+        display: none;
+    }
+}

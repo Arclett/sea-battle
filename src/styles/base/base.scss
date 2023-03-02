@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+*,
+*:before,
+*:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+    background: aliceblue;
+}
+
+a:focus,
+a:active {
+    outline: none;
+}
+
+a,
+a:visited,
+a:hover {
+    text-decoration: none;
+}
+
+.header,
+.footer {
+    height: 60px;
+    background: midnightblue;
+}
+
+.hidden {
+    display: none;
+}
+
+.disabled {
+    background-color: $overlay;
+}

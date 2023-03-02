@@ -1,0 +1,9 @@
+.footer__references,
+.footer__git-link,
+.footer__year {
+    @include text("Montserrat", normal, 400, 2rem, $background, 2.3rem);
+}
+
+.round-button__text {
+    @include text("Montserrat", normal, 400, 2rem, $background, 2.3rem);
+}

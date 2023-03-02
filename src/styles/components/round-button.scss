@@ -1,0 +1,20 @@
+.round-button {
+    width: 105px;
+    height: 105px;
+    display: flex;
+    background-color: $mainColor;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.round-button__link {
+    display: flex;
+    margin: auto;
+    width: 90px;
+    height: 90px;
+    background: $background;
+    border-radius: 50%;
+    transition: 0.3s;
+    overflow: hidden;
+    cursor: pointer;
+}
