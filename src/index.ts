@@ -12,7 +12,7 @@ Visitor.instance = new Visitor();
 main.start();
 main.appRouting(location.hash);
 if ((SocketHandler.instance.currentStatus = MainStatus.other)) {
-    main.appRouting(location.hash);
+  main.appRouting(location.hash);
 } else {
-    main.appRouting(" ");
+  main.appRouting(" ");
 }
